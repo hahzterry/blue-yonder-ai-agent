@@ -1,5 +1,7 @@
 # Yard Planner AI — WMS Conversational Agent Demo
 
+**▶ Live demo: https://danielli5.github.io/blue-yonder-ai-agent/**
+
 A clickable prototype that recreates a **Blue Yonder WMS "Door Activity"** screen and embeds a
 **conversational AI agent** that re-plans the dock/yard schedule from plain-English "what-if" requests.
 
