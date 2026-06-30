@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>BlueYonder — Door Activity (AI Yard Planner Demo)</title>
+<style>
+  :root{
+    --by-navy:#13315c;
+    --by-navy-dark:#0e2647;
+    --by-blue:#2f7ed8;
+    --by-blue-d:#1f5fa8;
+    --by-green:#5aa630;
+    --by-green-d:#46851f;
+    --by-gray:#9aa5b1;
+    --by-gray-d:#7c8794;
+    --by-orange:#e2900f;
+    --by-red:#d23b3b;
+    --grid:#e6e9ee;
+    --grid-strong:#d3d8e0;
+    --panel:#ffffff;
+    --ink:#33414f;
+    --ink-soft:#6b7785;
+    --tab-ink:#1f5fa8;
+    --col-w:74px;        /* width of one hour column */
+    --label-w:108px;     /* width of the door label column */
+    --start-hr:4;        /* timeline starts 4am */
+    --end-hr:20;         /* timeline ends 8pm */
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;}
+  body{
+    font-family:"Segoe UI",Roboto,Arial,sans-serif;
+    font-size:12px;color:var(--ink);
+    background:#dfe3e8;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+
+  /* ---------- TOP DARK HEADER ---------- */
+  .topbar{
+    background:linear-gradient(180deg,var(--by-navy) 0%,var(--by-navy-dark) 100%);
+    color:#fff;display:flex;align-items:center;height:42px;padding:0 12px;gap:14px;
+    flex:none;
+  }
+  .brand{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:600;letter-spacing:.2px;}
+  .brand .logo{width:22px;height:22px;flex:none;}
+  .topbar .spacer{flex:1;}
+  .topbar .tb-item{font-size:12px;color:#dbe6f5;display:flex;align-items:center;gap:5px;cursor:default;}
+  .topbar .tb-item.caret::after{content:"▾";font-size:9px;opacity:.8;}
+  .topbar .tb-item:hover{color:#fff;}
+  .search{display:flex;align-items:center;background:#21436e;border:1px solid #34568a;border-radius:3px;padding:3px 8px;gap:6px;width:200px;}
+  .search input{background:transparent;border:none;outline:none;color:#fff;font-size:12px;width:100%;}
+  .search input::placeholder{color:#9fb6d6;}
+  .icon-btn{width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:3px;cursor:default;color:#cfe0f5;}
+  .icon-btn:hover{background:rgba(255,255,255,.1);}
+
+  /* ---------- SECONDARY TAB NAV ---------- */
+  .subnav{
+    background:#f4f6f9;border-bottom:1px solid var(--grid-strong);
+    display:flex;align-items:stretch;height:30px;flex:none;overflow:hidden;
+  }
+  .subnav .tab{
+    display:flex;align-items:center;padding:0 11px;font-size:11.5px;color:var(--ink-soft);
+    border-right:1px solid #eaedf1;cursor:default;white-space:nowrap;
+  }
+  .subnav .tab.section{color:var(--by-navy);font-weight:600;background:#e9eef5;}
+  .subnav .tab.section::after{content:" ▾";font-size:9px;}
+  .subnav .tab.active{color:var(--tab-ink);font-weight:600;background:#fff;border-bottom:2px solid var(--by-blue);}
+  .subnav .tab:hover{color:var(--tab-ink);}
+  .subnav .more{margin-left:auto;color:var(--by-navy);font-weight:700;padding:0 10px;}
+
+  /* ---------- TOOLBAR ---------- */
+  .toolbar{
+    background:#fff;border-bottom:1px solid var(--grid-strong);
+    display:flex;align-items:center;height:38px;padding:0 14px;flex:none;
+  }
+  .toolbar h1{font-size:16px;font-weight:600;color:#2a3744;margin:0;}
+  .toolbar .spacer{flex:1;}
+  .toolbar .clock{font-size:13px;color:#41506a;margin-right:10px;font-variant-numeric:tabular-nums;}
+  .toolbar .t-icon{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:3px;color:#5a6b7d;cursor:default;}
+  .toolbar .t-icon:hover{background:#eef2f7;}
+
+  /* ---------- MAIN SPLIT ---------- */
+  .main{flex:1;display:flex;min-height:0;background:#dfe3e8;padding:8px;gap:8px;}
+  .doors-panel{flex:1;min-width:0;background:var(--panel);border:1px solid var(--grid-strong);border-radius:4px;display:flex;flex-direction:column;overflow:hidden;}
+  .ai-panel{width:392px;flex:none;background:var(--panel);border:1px solid var(--grid-strong);border-radius:4px;display:flex;flex-direction:column;overflow:hidden;}
+
+  /* panel header strips */
+  .panel-hd{display:flex;align-items:center;height:30px;padding:0 12px;border-bottom:1px solid var(--grid);background:#fbfcfd;flex:none;}
+  .panel-hd .title{font-size:13px;font-weight:600;color:#33414f;}
+  .panel-hd .right{margin-left:auto;display:flex;gap:14px;align-items:center;color:var(--by-blue);font-size:11.5px;}
+  .panel-hd .right .lnk{cursor:default;}
+  .panel-hd .right .lnk:hover{text-decoration:underline;}
+
+  .filters{display:flex;align-items:center;gap:8px;height:30px;padding:0 12px;border-bottom:1px solid var(--grid);background:#fff;flex:none;}
+  .filters .qf{display:flex;align-items:center;gap:6px;border:1px solid var(--grid-strong);border-radius:3px;padding:2px 8px;color:var(--ink-soft);font-size:11px;background:#fff;}
+  .filters .qf::after{content:"▾";font-size:8px;}
+  .filters .fi{width:22px;height:22px;display:flex;align-items:center;justify-content:center;color:#7c8794;}
+  .filters .star{color:#e8b923;margin-left:auto;}
+
+  /* ---------- GANTT ---------- */
+  .gantt-scroll{flex:1;overflow:auto;position:relative;}
+  .gantt{
+    min-width:calc(var(--label-w) + (var(--end-hr) - var(--start-hr)) * var(--col-w));
+  }
+  .time-head{
+    display:flex;position:sticky;top:0;z-index:6;background:#f4f6f9;border-bottom:1px solid var(--grid-strong);height:26px;
+  }
+  .time-head .corner{
+    width:var(--label-w);flex:none;position:sticky;left:0;z-index:7;background:#f4f6f9;
+    border-right:1px solid var(--grid-strong);display:flex;align-items:center;padding:0 8px;
+    font-size:11px;color:#5a6b7d;font-weight:600;gap:6px;
+  }
+  .time-head .corner .nav{color:#9aa5b1;}
+  .time-head .hours{display:flex;}
+  .time-head .hr{width:var(--col-w);flex:none;font-size:12px;color:#7c8794;display:flex;align-items:center;padding-left:6px;border-right:1px solid var(--grid);}
+
+  .row{display:flex;height:50px;border-bottom:1px solid var(--grid);position:relative;}
+  .row:nth-child(even){background:#fafbfc;}
+  .row .dlabel{
+    width:var(--label-w);flex:none;position:sticky;left:0;z-index:5;
+    background:inherit;border-right:1px solid var(--grid-strong);
+    padding:5px 8px;display:flex;flex-direction:column;justify-content:center;
+  }
+  .row:nth-child(even) .dlabel{background:#fafbfc;}
+  .row:nth-child(odd) .dlabel{background:#fff;}
+  .row .dlabel .id{font-size:14.5px;font-weight:700;color:#2f3e4d;display:flex;align-items:center;gap:5px;}
+  .row .dlabel .id .arr{color:#9aa5b1;font-size:9px;}
+  .row .dlabel .sub{font-size:11px;color:#9aa5b1;margin-top:2px;}
+  .row .dlabel .sub.warn{color:var(--by-red);}
+
+  .track{position:relative;flex:1;}
+  .track .colline{position:absolute;top:0;bottom:0;width:1px;background:var(--grid);}
+
+  .bar{
+    position:absolute;top:7px;height:24px;border-radius:3px;display:flex;align-items:center;
+    padding:0 8px;color:#fff;font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;
+    cursor:default;box-shadow:0 1px 1px rgba(0,0,0,.12);letter-spacing:.2px;
+    transition:left .55s cubic-bezier(.22,.61,.36,1), width .45s ease, top .45s ease, background .3s;
+  }
+  .bar .chk{margin-left:auto;padding-left:6px;font-size:12px;}
+  .bar.in{background:linear-gradient(180deg,var(--by-blue),var(--by-blue-d));}
+  .bar.out{background:linear-gradient(180deg,var(--by-green),var(--by-green-d));}
+  .bar.done{background:linear-gradient(180deg,var(--by-gray),var(--by-gray-d));}
+  .bar.orange{background:linear-gradient(180deg,#efb04b,var(--by-orange));}
+  .bar.conflict{outline:2px solid var(--by-red);outline-offset:0;box-shadow:0 0 0 2px rgba(210,59,59,.25);}
+  .bar.flash{animation:flash 1.1s ease;}
+  @keyframes flash{
+    0%{box-shadow:0 0 0 0 rgba(47,126,216,.0);}
+    25%{box-shadow:0 0 0 4px rgba(255,213,0,.85);}
+    100%{box-shadow:0 1px 1px rgba(0,0,0,.12);}
+  }
+  .tags{position:absolute;top:34px;display:flex;gap:3px;white-space:nowrap;}
+  .tag{font-size:9.5px;font-weight:700;color:#fff;border-radius:2px;padding:0 4px;line-height:13px;height:13px;display:inline-flex;align-items:center;}
+  .tag.red{background:var(--by-red);}
+  .tag.gray{background:#8a96a3;}
+  .tag.amber{background:var(--by-orange);}
+  .tag.slate{background:#5a6b7d;}
+
+  /* ---------- AI PANEL ---------- */
+  .ai-hd{
+    background:linear-gradient(180deg,var(--by-navy),var(--by-navy-dark));color:#fff;
+    padding:9px 12px;display:flex;align-items:center;gap:9px;flex:none;
+  }
+  .ai-hd .av{width:28px;height:28px;border-radius:6px;background:rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;flex:none;}
+  .ai-hd .t1{font-size:13px;font-weight:600;line-height:1.1;}
+  .ai-hd .t2{font-size:10.5px;color:#a9c2e2;display:flex;align-items:center;gap:5px;margin-top:1px;}
+  .ai-hd .dot{width:6px;height:6px;border-radius:50%;background:#4ade80;display:inline-block;box-shadow:0 0 0 0 rgba(74,222,128,.6);animation:pulse 2s infinite;}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 rgba(74,222,128,.5);}70%{box-shadow:0 0 0 5px rgba(74,222,128,0);}100%{box-shadow:0 0 0 0 rgba(74,222,128,0);}}
+
+  .metrics{display:flex;gap:6px;padding:8px;border-bottom:1px solid var(--grid);background:#f7f9fb;flex:none;}
+  .metric{flex:1;background:#fff;border:1px solid var(--grid);border-radius:5px;padding:5px 7px;text-align:center;}
+  .metric .v{font-size:16px;font-weight:700;color:#2a3744;font-variant-numeric:tabular-nums;line-height:1.1;}
+  .metric .v.bad{color:var(--by-red);}
+  .metric .v.good{color:var(--by-green-d);}
+  .metric .k{font-size:9px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.4px;margin-top:2px;}
+
+  .chat{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:#f4f6f9;}
+  .msg{max-width:90%;font-size:12px;line-height:1.5;border-radius:10px;padding:8px 11px;white-space:pre-wrap;word-wrap:break-word;}
+  .msg.user{align-self:flex-end;background:var(--by-blue);color:#fff;border-bottom-right-radius:3px;}
+  .msg.bot{align-self:flex-start;background:#fff;border:1px solid var(--grid);color:#2f3e4d;border-bottom-left-radius:3px;box-shadow:0 1px 1px rgba(0,0,0,.03);}
+  .msg.bot b{color:#1f4e87;}
+  .msg.bot .ok{color:var(--by-green-d);font-weight:700;}
+  .msg.bot .wn{color:var(--by-orange);font-weight:700;}
+  .msg.bot .er{color:var(--by-red);font-weight:700;}
+  .msg.bot ul{margin:6px 0 2px;padding-left:16px;}
+  .msg.bot li{margin:2px 0;}
+  .typing{align-self:flex-start;background:#fff;border:1px solid var(--grid);border-radius:10px;border-bottom-left-radius:3px;padding:10px 12px;display:flex;gap:4px;}
+  .typing span{width:6px;height:6px;border-radius:50%;background:#b6c0cc;animation:bounce 1.2s infinite;}
+  .typing span:nth-child(2){animation-delay:.15s;}
+  .typing span:nth-child(3){animation-delay:.3s;}
+  @keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.5;}30%{transform:translateY(-4px);opacity:1;}}
+
+  .chips{display:flex;flex-wrap:wrap;gap:6px;padding:8px 10px;border-top:1px solid var(--grid);background:#fff;flex:none;}
+  .chip{font-size:10.5px;color:var(--tab-ink);background:#eef4fb;border:1px solid #d4e3f5;border-radius:14px;padding:4px 9px;cursor:pointer;transition:.15s;}
+  .chip:hover{background:#dcebfb;background:#dcecfc;border-color:#b9d4f0;}
+
+  .composer{display:flex;gap:7px;padding:9px 10px;border-top:1px solid var(--grid);background:#fff;flex:none;}
+  .composer input{flex:1;border:1px solid var(--grid-strong);border-radius:18px;padding:8px 13px;font-size:12px;outline:none;}
+  .composer input:focus{border-color:var(--by-blue);}
+  .composer button{background:var(--by-blue);color:#fff;border:none;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;flex:none;}
+  .composer button:hover{background:var(--by-blue-d);}
+
+  .demo-flag{position:fixed;bottom:8px;left:8px;font-size:10px;color:#90a0b3;background:rgba(255,255,255,.7);padding:2px 7px;border-radius:4px;z-index:50;pointer-events:none;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== TOP DARK BAR ===== -->
+  <div class="topbar">
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 24 24" fill="none">
+        <g fill="#ffffff">
+          <path d="M12 2c.6 1.7.6 3.3 0 5-.6-1.7-.6-3.3 0-5z"/>
+          <path d="M12 22c-.6-1.7-.6-3.3 0-5 .6 1.7.6 3.3 0 5z"/>
+          <path d="M2 12c1.7-.6 3.3-.6 5 0-1.7.6-3.3.6-5 0z"/>
+          <path d="M22 12c-1.7.6-3.3.6-5 0 1.7-.6 3.3-.6 5 0z"/>
+          <path d="M5 5c1.6.4 2.9 1.3 4 2.5C7.9 6.4 6.6 5.4 5 5z" transform="rotate(0 12 12)"/>
+        </g>
+        <circle cx="12" cy="12" r="2.6" fill="#36b3e7"/>
+        <g stroke="#9fdcf5" stroke-width="1.4" stroke-linecap="round">
+          <line x1="12" y1="3.5" x2="12" y2="7"/>
+          <line x1="12" y1="17" x2="12" y2="20.5"/>
+          <line x1="3.5" y1="12" x2="7" y2="12"/>
+          <line x1="17" y1="12" x2="20.5" y2="12"/>
+        </g>
+      </svg>
+      BlueYonder
+    </div>
+    <div class="spacer"></div>
+    <div class="tb-item caret">SUPER</div>
+    <div class="tb-item">WMD1</div>
+    <div class="tb-item">Workstation</div>
+    <div class="icon-btn">?</div>
+    <div class="search">
+      <input placeholder="Search" />
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9fb6d6" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/></svg>
+    </div>
+  </div>
+
+  <!-- ===== SUB NAV TABS ===== -->
+  <div class="subnav">
+    <div class="tab section">RECEIVING</div>
+    <div class="tab">Receiving Dashboard</div>
+    <div class="tab active">Door Activity</div>
+    <div class="tab">Inbound Shipments</div>
+    <div class="tab">Vendor Quality</div>
+    <div class="tab">Work Queue</div>
+    <div class="tab">Inventory</div>
+    <div class="tab">Storage Rules Simulation</div>
+    <div class="tab">Appointments</div>
+    <div class="tab">Workflows</div>
+    <div class="tab">Check In</div>
+    <div class="tab">Staging</div>
+    <div class="tab">Transport Equipment</div>
+    <div class="tab">Print Compliant Labels</div>
+    <div class="tab">History</div>
+    <div class="tab">Send RF Message</div>
+    <div class="more">»</div>
+  </div>
+
+  <!-- ===== TOOLBAR ===== -->
+  <div class="toolbar">
+    <h1>Door Activity</h1>
+    <div class="spacer"></div>
+    <div class="clock" id="clock">2:50 pm</div>
+    <div class="t-icon">⟳</div>
+    <div class="t-icon">🖶</div>
+    <div class="t-icon">👤</div>
+    <div class="t-icon">⤢</div>
+  </div>
+
+  <!-- ===== MAIN ===== -->
+  <div class="main">
+
+    <!-- LEFT: DOORS GANTT -->
+    <div class="doors-panel">
+      <div class="panel-hd">
+        <span class="title">Doors</span>
+        <div class="right"><span class="lnk">Audit &gt;</span><span class="lnk">Expand Timeline &raquo;</span></div>
+      </div>
+      <div class="filters">
+        <span class="qf">Quick Filters</span>
+        <span class="fi">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="3 4 21 4 14 12 14 19 10 21 10 12 3 4"/></svg>
+        </span>
+        <span class="star">★</span>
+      </div>
+      <div class="gantt-scroll">
+        <div class="gantt">
+          <div class="time-head">
+            <div class="corner"><span>Today</span><span class="nav">|◀ ◀ ▶</span></div>
+            <div class="hours" id="hours"></div>
+          </div>
+          <div id="rows"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: AI AGENT -->
+    <div class="ai-panel">
+      <div class="ai-hd">
+        <div class="av">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="8" width="16" height="11" rx="2.5"/><line x1="12" y1="8" x2="12" y2="4"/><circle cx="12" cy="3" r="1.4" fill="#fff"/><circle cx="9" cy="13" r="1.2" fill="#fff" stroke="none"/><circle cx="15" cy="13" r="1.2" fill="#fff" stroke="none"/><line x1="9.5" y1="16.5" x2="14.5" y2="16.5"/>
+          </svg>
+        </div>
+        <div>
+          <div class="t1">Yard Planner AI</div>
+          <div class="t2"><span class="dot"></span> Online · live dock optimization</div>
+        </div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric"><div class="v" id="m-util">—</div><div class="k">Dock Util</div></div>
+        <div class="metric"><div class="v" id="m-late">—</div><div class="k">Late</div></div>
+        <div class="metric"><div class="v" id="m-conf">—</div><div class="k">Conflicts</div></div>
+      </div>
+
+      <div class="chat" id="chat"></div>
+
+      <div class="chips" id="chips"></div>
+
+      <div class="composer">
+        <input id="input" placeholder="Ask the AI to re-plan the yard…" autocomplete="off" />
+        <button id="send" title="Send">➤</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div class="demo-flag">Interactive prototype — only the AI panel is functional</div>
+
+<script>
+/* ============================================================
+   DATA MODEL
+   ============================================================ */
+const START_HR = 4, END_HR = 20;           // 4am – 8pm
+const COL_W = 74;
+
+const DOORS = [
+  "Door 1","Door 2","Door 3","Door 4","Door 5","Door 6","Door 7",
+  "Door 8","Door 9","Door 10","Door 11","Door 12","Door 13","Door 14"
+];
+// Doors 1–7 are inbound/receiving, 8–14 are outbound/shipping
+function isRecv(door){ return DOORS.indexOf(door) < 7; }
+
+// type: in (blue/receiving) | out (green/shipping) | done (gray/completed)
+// start/end in decimal hours. tags: {t:'Late',c:'red'} etc.
+let SHIP = [
+  {id:"S1",  code:"S1",  door:"Door 1",  start:4.0, end:5.4,  type:"in",  tags:[{t:"Late",c:"red"},{t:"Over",c:"slate"},{t:"Safety",c:"red"}]},
+  {id:"S2",  code:"S2",  door:"Door 1",  start:9.7, end:10.4, type:"done",tags:[]},
+  {id:"S3",  code:"S3",  door:"Door 3",  start:7.6, end:8.2,  type:"in",  tags:[]},
+  {id:"S4",  code:"S4",  door:"Door 3",  start:12.0,end:12.7, type:"in",  tags:[]},
+  {id:"S5",  code:"S5",  door:"Door 4",  start:9.0, end:9.7,  type:"in",  tags:[]},
+  {id:"S6",  code:"S6",  door:"Door 5",  start:4.0, end:5.4,  type:"done",tags:[]},
+  {id:"S7",  code:"S7",  door:"Door 5",  start:7.8, end:9.6,  type:"in",  tags:[]},
+  {id:"S8",  code:"S8",  door:"Door 6",  start:4.0, end:5.3,  type:"in",  tags:[{t:"Late",c:"red"},{t:"Over",c:"slate"}]},
+  {id:"S9",  code:"S9",  door:"Door 6",  start:8.4, end:10.0, type:"in",  tags:[{t:"Unit",c:"gray"}]},
+  {id:"S10", code:"S10", door:"Door 7",  start:4.0, end:5.0,  type:"done",tags:[]},
+  {id:"S11", code:"S11", door:"Door 8",  start:4.0, end:5.2,  type:"done",tags:[]},
+  {id:"S12", code:"S12", door:"Door 8",  start:7.5, end:8.3,  type:"out", tags:[{t:"Late",c:"red"}]},
+  {id:"S13", code:"S13", door:"Door 8",  start:8.0, end:8.9,  type:"out", tags:[{t:"Late",c:"red"}]},
+  {id:"S14", code:"S14", door:"Door 9",  start:4.0, end:5.1,  type:"done",tags:[{t:"Suspended",c:"slate"},{t:"Over",c:"slate"}]},
+  {id:"S15", code:"S15", door:"Door 9",  start:9.0, end:9.8,  type:"out", tags:[]},
+  {id:"S16", code:"S16", door:"Door 9",  start:12.0,end:12.8, type:"out", tags:[]},
+  {id:"S17", code:"S17", door:"Door 10", start:4.0, end:5.1,  type:"done",tags:[]},
+  {id:"S18", code:"S18", door:"Door 10", start:8.4, end:9.2,  type:"out", tags:[]},
+  {id:"S19", code:"S19", door:"Door 11", start:4.0, end:5.2,  type:"done",tags:[{t:"Dispatch",c:"gray"},{t:"Late",c:"red"}]},
+  {id:"S20", code:"S20", door:"Door 11", start:7.6, end:8.5,  type:"out", tags:[{t:"Link",c:"gray"}]},
+  {id:"S21", code:"S21", door:"Door 11", start:8.1, end:9.0,  type:"out", tags:[{t:"Short",c:"amber"},{t:"Late",c:"red"}]},
+  {id:"S22", code:"S22", door:"Door 11", start:11.6,end:12.6, type:"out", tags:[{t:"Short",c:"amber"},{t:"Late",c:"red"}]},
+  {id:"S23", code:"S23", door:"Door 12", start:4.0, end:5.2,  type:"done",tags:[]},
+  {id:"S24", code:"S24", door:"Door 12", start:8.8, end:9.5,  type:"out", tags:[]},
+  {id:"S25", code:"S25", door:"Door 12", start:10.6,end:11.4, type:"out", tags:[{t:"Late",c:"red"}]},
+  {id:"S26", code:"S26", door:"Door 13", start:4.0, end:5.4,  type:"done",tags:[{t:"Late",c:"red"},{t:"Over",c:"slate"}]},
+  {id:"S27", code:"S27", door:"Door 13", start:9.4, end:10.2, type:"out", tags:[{t:"Late",c:"red"}]},
+  {id:"S28", code:"S28", door:"Door 14", start:4.0, end:5.3,  type:"done",tags:[]},
+  // ---- afternoon activity ----
+  {id:"S29", code:"S29", door:"Door 3",  start:14.5,end:15.6, type:"in",  tags:[]},
+  {id:"S30", code:"S30", door:"Door 6",  start:13.2,end:14.0, type:"in",  tags:[]},
+  {id:"S31", code:"S31", door:"Door 8",  start:15.0,end:16.0, type:"out", tags:[{t:"Hot",c:"amber"}]},
+  {id:"S32", code:"S32", door:"Door 10", start:13.0,end:13.8, type:"out", tags:[]},
+  {id:"S33", code:"S33", door:"Door 12", start:16.5,end:17.6, type:"out", tags:[]},
+  {id:"S34", code:"S34", door:"Door 14", start:14.0,end:15.0, type:"out", tags:[{t:"Late",c:"red"}]}
+];
+
+// snapshot for reset
+const ORIGINAL = JSON.parse(JSON.stringify(SHIP));
+
+/* ============================================================
+   RENDERING
+   ============================================================ */
+const hoursEl = document.getElementById('hours');
+const rowsEl  = document.getElementById('rows');
+
+function hrLabel(h){
+  const ap = h>=12 ? "pm":"am";
+  let hh = h%12; if(hh===0) hh=12;
+  return hh+ap;
+}
+
+function buildHeader(){
+  hoursEl.innerHTML="";
+  for(let h=START_HR; h<END_HR; h++){
+    const d=document.createElement('div');
+    d.className="hr"; d.style.width=COL_W+"px";
+    d.textContent=hrLabel(h);
+    hoursEl.appendChild(d);
+  }
+}
+
+function shipLabel(s){
+  return s.code;
+}
+
+function buildRows(flashIds=[]){
+  rowsEl.innerHTML="";
+  const totalCols = END_HR-START_HR;
+  DOORS.forEach(door=>{
+    const row=document.createElement('div'); row.className="row";
+
+    // label
+    const lab=document.createElement('div'); lab.className="dlabel";
+    const dur = doorActiveDuration(door);
+    lab.innerHTML = `<div class="id"><span class="arr">◀</span>${door}</div>`+
+                    (dur ? `<div class="sub ${dur.warn?'warn':''}">${dur.text}</div>`:``);
+    row.appendChild(lab);
+
+    // track
+    const track=document.createElement('div'); track.className="track";
+    track.style.width = (totalCols*COL_W)+"px";
+    for(let i=1;i<totalCols;i++){
+      const l=document.createElement('div'); l.className="colline"; l.style.left=(i*COL_W)+"px"; track.appendChild(l);
+    }
+
+    const inDoor = SHIP.filter(s=>s.door===door).sort((a,b)=>a.start-b.start);
+    const conflicts = findRowConflicts(inDoor);
+    inDoor.forEach(s=>{
+      const left=(s.start-START_HR)*COL_W;
+      const w=Math.max((s.end-s.start)*COL_W-2, 16);
+      const bar=document.createElement('div');
+      let cls = s.type;
+      if(s.tags.some(t=>t.t==="Suspended")) cls="orange";
+      bar.className="bar "+cls + (conflicts.has(s.id)?" conflict":"") + (flashIds.includes(s.id)?" flash":"");
+      bar.style.left=left+"px"; bar.style.width=w+"px";
+      const done = s.type==="done";
+      bar.innerHTML = `<span class="lbl">${shipLabel(s)}</span>`+(done?`<span class="chk">✓</span>`:``);
+      bar.title = `${shipLabel(s)} · ${door} · ${fmt(s.start)}–${fmt(s.end)}`;
+      track.appendChild(bar);
+
+      if(s.tags.length){
+        const tg=document.createElement('div'); tg.className="tags"; tg.style.left=left+"px";
+        tg.innerHTML = s.tags.map(t=>`<span class="tag ${t.c}">${t.t}</span>`).join("");
+        track.appendChild(tg);
+      }
+    });
+    row.appendChild(track);
+    rowsEl.appendChild(row);
+  });
+}
+
+function fmt(h){
+  let hh=Math.floor(h), mm=Math.round((h-hh)*60);
+  const ap=hh>=12?"pm":"am"; let H=hh%12; if(H===0)H=12;
+  return H+(mm?(":"+String(mm).padStart(2,"0")):"")+ap;
+}
+
+function doorActiveDuration(door){
+  const active = SHIP.filter(s=>s.door===door && s.type!=="done");
+  if(!active.length) return null;
+  const hrs = active.reduce((a,s)=>a+(s.end-s.start),0);
+  const h=Math.floor(hrs), m=Math.round((hrs-h)*60);
+  const late = active.some(s=>s.tags.some(t=>t.t==="Late"));
+  return {text:`${h}h ${String(m).padStart(2,'0')}m`, warn:late};
+}
+
+/* conflicts = overlapping non-done shipments in same door */
+function findRowConflicts(list){
+  const set=new Set();
+  const act=list.filter(s=>s.type!=="done");
+  for(let i=0;i<act.length;i++)for(let j=i+1;j<act.length;j++){
+    if(act[i].start<act[j].end && act[j].start<act[i].end){set.add(act[i].id);set.add(act[j].id);}
+  }
+  return set;
+}
+function totalConflicts(){
+  let c=0;
+  DOORS.forEach(d=>{c+=findRowConflicts(SHIP.filter(s=>s.door===d)).size;});
+  return c;
+}
+
+/* ============================================================
+   METRICS
+   ============================================================ */
+function updateMetrics(){
+  // utilization = doors with at least one active (non-done) shipment / total doors
+  const busy = DOORS.filter(d=>SHIP.some(s=>s.door===d && s.type!=="done")).length;
+  const util = Math.round(busy/DOORS.length*100);
+  const late = SHIP.filter(s=>s.type!=="done" && s.tags.some(t=>t.t==="Late")).length;
+  const conf = totalConflicts();
+  const eU=document.getElementById('m-util'), eL=document.getElementById('m-late'), eC=document.getElementById('m-conf');
+  eU.textContent=util+"%";
+  eL.textContent=late; eL.className="v "+(late>3?"bad":(late===0?"good":""));
+  eC.textContent=conf; eC.className="v "+(conf>0?"bad":"good");
+}
+
+function render(flashIds=[]){ buildRows(flashIds); updateMetrics(); }
+
+/* ============================================================
+   AI AGENT  — local NLP + planner
+   ============================================================ */
+const chat=document.getElementById('chat');
+const input=document.getElementById('input');
+
+function addUser(t){
+  const d=document.createElement('div'); d.className="msg user"; d.textContent=t;
+  chat.appendChild(d); chat.scrollTop=chat.scrollHeight;
+}
+function addBot(html){
+  const d=document.createElement('div'); d.className="msg bot"; d.innerHTML=html;
+  chat.appendChild(d); chat.scrollTop=chat.scrollHeight;
+}
+function typing(){
+  const d=document.createElement('div'); d.className="typing"; d.id="typing";
+  d.innerHTML="<span></span><span></span><span></span>";
+  chat.appendChild(d); chat.scrollTop=chat.scrollHeight; return d;
+}
+function stopTyping(){const t=document.getElementById('typing'); if(t)t.remove();}
+
+/* ---- entity extraction ---- */
+function findShipment(text){
+  const t=text.toLowerCase();
+  // match shipment code (S1..S34) on a word boundary so "S1" doesn't match "S12"
+  let best=null;
+  SHIP.forEach(s=>{
+    const code=s.code.toLowerCase();
+    const re=new RegExp("\\b"+code+"\\b");
+    if(re.test(t)){
+      const w=code.length + (s.type!=="done"?3:0);
+      if(!best || w>best.w) best={s,w};
+    }
+  });
+  if(best) return best.s;
+  // fallback: bare number "ship 12" / "12" -> S12, prefer active
+  const m=t.match(/\b(\d{1,3})\b/);
+  if(m){
+    const hits=SHIP.filter(s=>s.code.toLowerCase()==="s"+m[1]);
+    if(hits.length) return hits.find(s=>s.type!=="done") || hits[0];
+  }
+  return null;
+}
+function resolveDoor(num){
+  const n=parseInt(num,10);
+  if(!isNaN(n) && n>=1 && n<=DOORS.length) return DOORS[n-1];
+  return null;
+}
+function findDoor(text){
+  // 1) destination after "to" — "...to door 4" (ignores "to 8pm" via the \b after digits)
+  const toM=text.match(/\bto\s+(?:door|dock)\s*#?\s*(\d{1,2})\b/i);
+  if(toM) return resolveDoor(toM[1]);
+  // 2) any "door 4" / "dock 4"
+  const nM=text.match(/(?:door|dock)\s*#?\s*(\d{1,2})\b/i);
+  if(nM) return resolveDoor(nM[1]);
+  return null;
+}
+function findTimes(text){
+  const out=[];
+  const re=/(\d{1,2})(?::(\d{2}))?\s*(a\.?m\.?|p\.?m\.?|am|pm|o'?clock)?/gi;
+  let m; const raw=[];
+  // prefer am/pm matches
+  const re2=/(\d{1,2})(?::(\d{2}))?\s*(am|pm|a\.m\.|p\.m\.)/gi;
+  while((m=re2.exec(text))!==null){
+    let h=parseInt(m[1],10); const mm=m[2]?parseInt(m[2],10):0;
+    const ap=m[3].replace(/\./g,'').toLowerCase();
+    if(ap==="pm"&&h<12)h+=12; if(ap==="am"&&h===12)h=0;
+    out.push(h+mm/60);
+  }
+  return out;
+}
+function findShift(text){
+  // "2 hours late/later/delay" -> +2 ; "1 hour earlier" -> -1
+  const m=text.toLowerCase().match(/(\d+(?:\.\d+)?)\s*(hour|hr|h)s?\s*(late|later|delay|behind|earlier|early|ahead|sooner)?/);
+  if(!m) return null;
+  let v=parseFloat(m[1]);
+  const dir=(m[3]||'');
+  if(/earl|ahead|sooner/.test(dir)) v=-v;
+  // default delay direction if word "late/delay/behind" or none-with-late-context
+  return v;
+}
+
+/* ---- conflict auto-resolution (the "optimize" engine) ---- */
+function resolveConflicts(protectedId){
+  const actions=[];
+  DOORS.forEach(door=>{
+    let list=SHIP.filter(s=>s.door===door && s.type!=="done").sort((a,b)=>a.start-b.start);
+    for(let i=1;i<list.length;i++){
+      const prev=list[i-1], cur=list[i];
+      if(cur.start < prev.end){           // overlap
+        // move the non-protected / later one
+        let mover = (cur.id===protectedId) ? prev : cur;
+        // try relocating mover to another door with a free slot at its time
+        const alt=findFreeDoor(mover, door);
+        if(alt){
+          actions.push(`Moved <b>${shipLabel(mover)}</b> to <b>${alt}</b> (was double-booked on ${door})`);
+          mover.door=alt;
+          list=SHIP.filter(s=>s.door===door && s.type!=="done").sort((a,b)=>a.start-b.start);
+          i=0; continue;
+        } else {
+          // push later shipment back to free the dock
+          const dur=cur.end-cur.start;
+          const ns=prev.end, ne=ns+dur;
+          if(ne<=END_HR){
+            actions.push(`Pushed <b>${shipLabel(cur)}</b> to ${fmt(ns)} on ${door} to clear the overlap`);
+            cur.start=ns; cur.end=ne;
+          }
+        }
+      }
+    }
+  });
+  return actions;
+}
+function findFreeDoor(ship, exclude){
+  // a door of compatible type (inbound vs outbound) that is free during ship window
+  const wantRecv = isRecv(ship.door);
+  const cands = DOORS.filter(d=>d!==exclude && isRecv(d)===wantRecv);
+  for(const d of cands){
+    const busy=SHIP.some(s=>s.door===d && s.type!=="done" && s.start<ship.end && ship.start<s.end);
+    if(!busy) return d;
+  }
+  return null;
+}
+function freeDoorsBetween(a,b){
+  return DOORS.filter(d=>!SHIP.some(s=>s.door===d && s.type!=="done" && s.start<b && a<s.end));
+}
+
+/* ---- main brain ---- */
+function respond(text){
+  const t=text.toLowerCase().trim();
+  const flash=[];
+
+  // RESET
+  if(/\b(reset|undo|restore|original|start over)\b/.test(t)){
+    SHIP = JSON.parse(JSON.stringify(ORIGINAL));
+    render();
+    return `<span class="ok">↺ Plan restored.</span> All shipments are back to the original schedule.`;
+  }
+
+  // HELP
+  if(/\b(help|what can you|how do|capab)\b/.test(t)){
+    return `I'm your <b>Yard Planner AI</b>. I can run "what-if" scenarios on the live door schedule and re-optimize automatically. Try:
+<ul>
+<li>Move a shipment to another door / time</li>
+<li>Model a truck running late</li>
+<li>Optimize to clear all conflicts</li>
+<li>Find open doors in a time window</li>
+<li>Reset the plan</li></ul>`;
+  }
+
+  // FREE DOORS query
+  if(/\b(free|open|available|empty)\b/.test(t) && /\bdoor|dock\b/.test(t)){
+    const times=findTimes(t);
+    let a=times[0]??14, b=times[1]??(a+2);
+    if(b<a){const x=a;a=b;b=x;}
+    const free=freeDoorsBetween(a,b);
+    if(!free.length) return `<span class="wn">No doors are fully open between ${fmt(a)} and ${fmt(b)}.</span> The least-busy options are ${DOORS.slice(0,3).join(", ")}.`;
+    return `Between <b>${fmt(a)}</b> and <b>${fmt(b)}</b>, these doors are open:<br><b>${free.join(", ")}</b><br><br>Want me to slot a shipment into one of them?`;
+  }
+
+  // OPTIMIZE
+  if(/\b(optimi[sz]e|rebalance|re-?plan|fix|resolve|clear|reduce|clean up|smooth)\b/.test(t) && !findShipment(t)){
+    const before=totalConflicts();
+    const actions=resolveConflicts(null);
+    render(SHIP.map(s=>s.id));
+    const after=totalConflicts();
+    if(!actions.length) return `I scanned all 14 doors — <span class="ok">no conflicts to resolve.</span> Dock utilization is balanced.`;
+    return `<b>Optimization complete.</b> Resolved <span class="ok">${before-after} conflict(s)</span>.
+<ul>${actions.map(a=>`<li>${a}</li>`).join("")}</ul>
+Conflicts now: <b>${after}</b>. The board reflects the new plan.`;
+  }
+
+  // MOVE / WHAT-IF / DELAY
+  const ship=findShipment(t);
+  const door=findDoor(t);
+  const times=findTimes(t);
+  const shift=findShift(t);
+
+  if(ship && (door || times.length || shift!==null)){
+    const fromDoor=ship.door, fromStart=ship.start, fromEnd=ship.end;
+    const dur=ship.end-ship.start;
+    const changes=[];
+
+    if(shift!==null){
+      ship.start=Math.max(START_HR, ship.start+shift);
+      ship.end=ship.start+dur;
+      changes.push(`shifted ${shift>0?'+':''}${shift}h → now ${fmt(ship.start)}–${fmt(ship.end)}`);
+    }
+    if(times.length>=2){
+      ship.start=times[0]; ship.end=times[1];
+      changes.push(`rescheduled to ${fmt(ship.start)}–${fmt(ship.end)}`);
+    } else if(times.length===1){
+      ship.start=times[0]; ship.end=times[0]+dur;
+      changes.push(`start moved to ${fmt(ship.start)} (${(dur*60|0)} min dwell)`);
+    }
+    if(door && door!==fromDoor){
+      ship.door=door;
+      changes.push(`relocated ${fromDoor} → ${door}`);
+    }
+    // make it active if it was completed (we're re-planning it)
+    if(ship.type==="done") ship.type = isRecv(ship.door)?"in":"out";
+
+    flash.push(ship.id);
+
+    // auto-optimize knock-on conflicts, protecting the user's shipment
+    const before=totalConflicts();
+    const actions=resolveConflicts(ship.id);
+    const after=totalConflicts();
+    render([ship.id, ...SHIP.filter(s=>findRowConflicts(SHIP.filter(x=>x.door===s.door)).size).map(s=>s.id)]);
+
+    let msg=`<b>Scenario applied:</b> ${shipLabel(ship)}
+<ul>${changes.map(c=>`<li>${c}</li>`).join("")}</ul>`;
+    if(actions.length){
+      msg+=`Re-optimized the affected docks:
+<ul>${actions.map(a=>`<li>${a}</li>`).join("")}</ul>`;
+    } else if(after===0){
+      msg+=`<span class="ok">✓ No conflicts</span> — the dock is clear at the new slot.`;
+    }
+    msg+=`<br>Conflicts: <b>${after}</b> · Late shipments now: <b>${SHIP.filter(s=>s.type!=='done'&&s.tags.some(g=>g.t==='Late')).length}</b>.`;
+    return msg;
+  }
+
+  if(ship && !door && !times.length && shift===null){
+    return `I found <b>${shipLabel(ship)}</b> on <b>${ship.door}</b> (${fmt(ship.start)}–${fmt(ship.end)}). What should I do — change its door, its time, or model it running late?`;
+  }
+
+  // fallback
+  return `I can re-plan the yard for you, but I couldn't pin down the change. Try naming a shipment plus a door or time, e.g.<br><i>"Move S12 to door 10 at 2pm"</i> or <i>"S8 is 2 hours late, re-plan."</i>`;
+}
+
+/* ---- send pipeline ---- */
+function send(text){
+  text=(text||input.value).trim();
+  if(!text) return;
+  addUser(text); input.value="";
+  const ty=typing();
+  setTimeout(()=>{
+    stopTyping();
+    const html=respond(text);
+    addBot(html);
+  }, 650+Math.random()*450);
+}
+
+document.getElementById('send').onclick=()=>send();
+input.addEventListener('keydown',e=>{if(e.key==="Enter")send();});
+
+/* ---- suggestion chips ---- */
+const CHIPS=[
+  "Move S12 to door 10 at 2pm",
+  "S8 is 2 hours late — re-plan",
+  "Optimize the whole schedule",
+  "Which doors are free between 2pm and 4pm?",
+  "Reset the plan"
+];
+const chipsEl=document.getElementById('chips');
+CHIPS.forEach(c=>{
+  const b=document.createElement('div'); b.className="chip"; b.textContent=c;
+  b.onclick=()=>send(c); chipsEl.appendChild(b);
+});
+
+/* ============================================================
+   INIT
+   ============================================================ */
+buildHeader();
+render();
+addBot(`👋 Hi Brandon Bright — I'm the <b>Yard Planner AI</b>, embedded right in Door Activity.
+I watch every dock in real time and can run <b>"what-if" scenarios</b> for you.
+<br><br>Ask me something, or tap a suggestion below to see the board re-plan itself.`);
+</script>
+</body>
+</html>
