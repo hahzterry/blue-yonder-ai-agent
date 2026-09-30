@@ -4,8 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
-<meta name="description" content="Yard Planner AI — interactive warehouse door activity and optimization prototype">
-<title>BlueYonder — Door Activity | Yard Planner AI</title>
+<meta name="description" content="BlueYonder Warehouse Operations Control Center with Yard Planner AI">
+<title>BlueYonder — Warehouse Operations Control Center</title>
+
 <style>
 :root{
   --by-navy:#13315c;
@@ -19,6 +20,7 @@
   --by-orange:#e2900f;
   --by-red:#d23b3b;
   --by-purple:#7357c7;
+
   --bg:#dfe3e8;
   --panel:#fff;
   --panel-soft:#f7f9fb;
@@ -27,23 +29,29 @@
   --ink:#33414f;
   --ink-soft:#6b7785;
   --ink-light:#8d98a5;
+
   --success-bg:#edf7e8;
   --warning-bg:#fff7e6;
   --danger-bg:#fff0f0;
   --info-bg:#edf5ff;
+
   --col-w:74px;
   --label-w:108px;
+
   --shadow:0 1px 3px rgba(20,35,50,.08);
   --shadow-lg:0 10px 30px rgba(20,35,50,.14);
 }
+
 *{
   box-sizing:border-box;
 }
+
 html,
 body{
   margin:0;
   height:100%;
 }
+
 body{
   font-family:"Segoe UI",Roboto,Arial,sans-serif;
   font-size:12px;
@@ -51,27 +59,36 @@ body{
   background:var(--bg);
   -webkit-font-smoothing:antialiased;
 }
+
 button,
-input{
+input,
+select,
+textarea{
   font:inherit;
 }
+
 button{
   border:0;
 }
+
 button:focus-visible,
-input:focus-visible{
+input:focus-visible,
+select:focus-visible{
   outline:2px solid var(--by-blue);
   outline-offset:2px;
 }
+
 .app{
   height:100vh;
   display:flex;
   flex-direction:column;
   overflow:hidden;
 }
+
 /* ============================================================
    TOP BAR
 ============================================================ */
+
 .topbar{
   background:linear-gradient(180deg,var(--by-navy),var(--by-navy-dark));
   color:#fff;
@@ -82,6 +99,7 @@ input:focus-visible{
   gap:14px;
   flex:none;
 }
+
 .brand{
   display:flex;
   align-items:center;
@@ -89,14 +107,18 @@ input:focus-visible{
   font-size:16px;
   font-weight:600;
   letter-spacing:.2px;
+  white-space:nowrap;
 }
+
 .brand-logo{
   width:22px;
   height:22px;
 }
+
 .spacer{
   flex:1;
 }
+
 .tb-item{
   font-size:12px;
   color:#dbe6f5;
@@ -105,11 +127,13 @@ input:focus-visible{
   gap:5px;
   white-space:nowrap;
 }
+
 .tb-item.caret::after{
   content:"▾";
   font-size:9px;
   opacity:.8;
 }
+
 .icon-btn{
   width:28px;
   height:28px;
@@ -121,9 +145,11 @@ input:focus-visible{
   color:#cfe0f5;
   cursor:pointer;
 }
+
 .icon-btn:hover{
   background:rgba(255,255,255,.1);
 }
+
 .search{
   display:flex;
   align-items:center;
@@ -132,8 +158,9 @@ input:focus-visible{
   border-radius:4px;
   padding:4px 8px;
   gap:6px;
-  width:210px;
+  width:240px;
 }
+
 .search input{
   background:transparent;
   border:0;
@@ -141,49 +168,63 @@ input:focus-visible{
   color:#fff;
   width:100%;
 }
+
 .search input::placeholder{
   color:#9fb6d6;
 }
+
 /* ============================================================
-   NAV
+   NAVIGATION
 ============================================================ */
+
 .subnav{
   background:#f4f6f9;
   border-bottom:1px solid var(--grid-strong);
   display:flex;
   align-items:stretch;
-  min-height:32px;
+  min-height:34px;
   flex:none;
   overflow:auto hidden;
   scrollbar-width:none;
 }
+
 .subnav::-webkit-scrollbar{
   display:none;
 }
+
 .tab{
+  appearance:none;
   display:flex;
   align-items:center;
   padding:0 11px;
   font-size:11.5px;
   color:var(--ink-soft);
   border-right:1px solid #eaedf1;
+  background:transparent;
   white-space:nowrap;
   cursor:pointer;
+  transition:.15s ease;
 }
+
 .tab:hover{
-  color:var(--tab-ink,var(--by-blue-d));
+  color:var(--by-blue-d);
+  background:#eef3f9;
 }
+
 .tab.section{
   color:var(--by-navy);
   font-weight:600;
   background:#e9eef5;
+  cursor:default;
 }
+
 .tab.active{
   color:var(--by-blue-d);
   font-weight:600;
   background:#fff;
   border-bottom:2px solid var(--by-blue);
 }
+
 .more{
   margin-left:auto;
   color:var(--by-navy);
@@ -192,9 +233,11 @@ input:focus-visible{
   display:flex;
   align-items:center;
 }
+
 /* ============================================================
    TOOLBAR
 ============================================================ */
+
 .toolbar{
   background:#fff;
   border-bottom:1px solid var(--grid-strong);
@@ -204,18 +247,21 @@ input:focus-visible{
   padding:0 14px;
   flex:none;
 }
+
 .toolbar h1{
   font-size:16px;
   font-weight:600;
   color:#2a3744;
   margin:0;
 }
+
 .clock{
   font-size:13px;
   color:#41506a;
   margin-right:10px;
   font-variant-numeric:tabular-nums;
 }
+
 .t-icon{
   width:30px;
   height:30px;
@@ -227,12 +273,15 @@ input:focus-visible{
   cursor:pointer;
   background:transparent;
 }
+
 .t-icon:hover{
   background:#eef2f7;
 }
+
 /* ============================================================
    MAIN
 ============================================================ */
+
 .main{
   flex:1;
   display:flex;
@@ -240,43 +289,42 @@ input:focus-visible{
   background:var(--bg);
   padding:8px;
   gap:8px;
+  overflow:hidden;
 }
-.doors-panel,
-.ai-panel{
-  background:var(--panel);
+
+.view{
+  width:100%;
+  height:100%;
+  min-height:0;
+  overflow:auto;
+}
+
+.view.hidden{
+  display:none;
+}
+
+.panel{
+  background:#fff;
   border:1px solid var(--grid-strong);
   border-radius:5px;
-  overflow:hidden;
   box-shadow:var(--shadow);
+  overflow:hidden;
 }
-.doors-panel{
-  flex:1;
-  min-width:0;
-  display:flex;
-  flex-direction:column;
-}
-.ai-panel{
-  width:410px;
-  flex:none;
-  display:flex;
-  flex-direction:column;
-}
-/* ============================================================
-   PANEL HEADER
-============================================================ */
+
 .panel-hd{
   display:flex;
   align-items:center;
-  min-height:32px;
+  min-height:38px;
   padding:0 12px;
   border-bottom:1px solid var(--grid);
   background:#fbfcfd;
-  flex:none;
 }
+
 .panel-hd .title{
   font-size:13px;
   font-weight:600;
 }
+
 .panel-hd .right{
   margin-left:auto;
   display:flex;
@@ -285,25 +333,51 @@ input:focus-visible{
   color:var(--by-blue);
   font-size:11.5px;
 }
+
 .panel-link{
   cursor:pointer;
 }
+
 .panel-link:hover{
   text-decoration:underline;
 }
+
 /* ============================================================
-   FILTERS
+   DOOR ACTIVITY
 ============================================================ */
+
+.doors-layout{
+  height:100%;
+  display:flex;
+  gap:8px;
+  min-height:0;
+}
+
+.doors-panel{
+  flex:1;
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+}
+
+.ai-panel{
+  width:410px;
+  flex:none;
+  display:flex;
+  flex-direction:column;
+}
+
 .filters{
   display:flex;
   align-items:center;
   gap:8px;
-  min-height:34px;
+  min-height:38px;
   padding:0 12px;
   border-bottom:1px solid var(--grid);
   background:#fff;
   flex:none;
 }
+
 .filter-select{
   border:1px solid var(--grid-strong);
   border-radius:4px;
@@ -312,6 +386,7 @@ input:focus-visible{
   background:#fff;
   cursor:pointer;
 }
+
 .filter-btn{
   width:28px;
   height:28px;
@@ -323,24 +398,26 @@ input:focus-visible{
   cursor:pointer;
   border-radius:4px;
 }
+
 .filter-btn:hover{
   background:#eef2f7;
 }
+
 .star{
   color:#e8b923;
   margin-left:auto;
 }
-/* ============================================================
-   GANTT
-============================================================ */
+
 .gantt-scroll{
   flex:1;
   overflow:auto;
   position:relative;
 }
+
 .gantt{
   min-width:calc(var(--label-w) + 16 * var(--col-w));
 }
+
 .time-head{
   display:flex;
   position:sticky;
@@ -350,6 +427,7 @@ input:focus-visible{
   border-bottom:1px solid var(--grid-strong);
   height:28px;
 }
+
 .corner{
   width:var(--label-w);
   flex:none;
@@ -366,12 +444,15 @@ input:focus-visible{
   font-weight:600;
   gap:5px;
 }
+
 .corner .nav{
   color:#9aa5b1;
 }
+
 .hours{
   display:flex;
 }
+
 .hr{
   width:var(--col-w);
   flex:none;
@@ -382,18 +463,18 @@ input:focus-visible{
   padding-left:6px;
   border-right:1px solid var(--grid);
 }
+
 .row{
   display:flex;
   height:56px;
   border-bottom:1px solid var(--grid);
   position:relative;
 }
+
 .row:nth-child(even){
   background:#fafbfc;
 }
-.row.highlight{
-  background:#eef5ff;
-}
+
 .dlabel{
   width:var(--label-w);
   flex:none;
@@ -407,12 +488,15 @@ input:focus-visible{
   flex-direction:column;
   justify-content:center;
 }
+
 .row:nth-child(even) .dlabel{
   background:#fafbfc;
 }
+
 .row:nth-child(odd) .dlabel{
   background:#fff;
 }
+
 .dlabel .id{
   font-size:14px;
   font-weight:700;
@@ -421,19 +505,23 @@ input:focus-visible{
   align-items:center;
   gap:5px;
 }
+
 .dlabel .sub{
   font-size:10.5px;
   color:#9aa5b1;
   margin-top:2px;
 }
+
 .dlabel .sub.warn{
   color:var(--by-red);
 }
+
 .track{
   position:relative;
   flex:1;
   min-width:1184px;
 }
+
 .colline{
   position:absolute;
   top:0;
@@ -441,6 +529,7 @@ input:focus-visible{
   width:1px;
   background:var(--grid);
 }
+
 .bar{
   position:absolute;
   top:7px;
@@ -462,50 +551,55 @@ input:focus-visible{
     top .25s ease,
     transform .15s ease;
 }
+
 .bar:hover{
   transform:translateY(-1px);
   z-index:9;
 }
+
 .bar.in{
   background:linear-gradient(180deg,var(--by-blue),var(--by-blue-d));
 }
+
 .bar.out{
   background:linear-gradient(180deg,var(--by-green),var(--by-green-d));
 }
+
 .bar.done{
   background:linear-gradient(180deg,var(--by-gray),var(--by-gray-d));
 }
+
 .bar.orange{
   background:linear-gradient(180deg,#efb04b,var(--by-orange));
 }
+
 .bar.conflict{
   outline:2px solid var(--by-red);
   box-shadow:
     0 0 0 2px rgba(210,59,59,.22),
     0 1px 2px rgba(0,0,0,.15);
 }
+
 .bar.selected{
   outline:2px solid #111;
   outline-offset:1px;
 }
+
 .bar.flash{
   animation:flash 1s ease;
 }
+
 @keyframes flash{
-  0%{
-    box-shadow:0 0 0 0 rgba(255,213,0,0);
-  }
-  25%{
-    box-shadow:0 0 0 5px rgba(255,213,0,.8);
-  }
-  100%{
-    box-shadow:0 1px 2px rgba(0,0,0,.15);
-  }
+  0%{box-shadow:0 0 0 0 rgba(255,213,0,0)}
+  25%{box-shadow:0 0 0 5px rgba(255,213,0,.8)}
+  100%{box-shadow:0 1px 2px rgba(0,0,0,.15)}
 }
+
 .bar .chk{
   margin-left:auto;
   padding-left:6px;
 }
+
 .tags{
   position:absolute;
   top:36px;
@@ -513,6 +607,7 @@ input:focus-visible{
   gap:3px;
   white-space:nowrap;
 }
+
 .tag{
   font-size:9px;
   font-weight:700;
@@ -524,21 +619,16 @@ input:focus-visible{
   display:inline-flex;
   align-items:center;
 }
-.tag.red{
-  background:var(--by-red);
-}
-.tag.gray{
-  background:#8a96a3;
-}
-.tag.amber{
-  background:var(--by-orange);
-}
-.tag.slate{
-  background:#5a6b7d;
-}
+
+.tag.red{background:var(--by-red)}
+.tag.gray{background:#8a96a3}
+.tag.amber{background:var(--by-orange)}
+.tag.slate{background:#5a6b7d}
+
 /* ============================================================
    AI PANEL
 ============================================================ */
+
 .ai-hd{
   background:linear-gradient(180deg,var(--by-navy),var(--by-navy-dark));
   color:#fff;
@@ -548,6 +638,7 @@ input:focus-visible{
   gap:9px;
   flex:none;
 }
+
 .ai-av{
   width:30px;
   height:30px;
@@ -557,10 +648,12 @@ input:focus-visible{
   align-items:center;
   justify-content:center;
 }
+
 .ai-title{
   font-size:13px;
   font-weight:600;
 }
+
 .ai-status{
   font-size:10.5px;
   color:#a9c2e2;
@@ -569,6 +662,7 @@ input:focus-visible{
   align-items:center;
   gap:5px;
 }
+
 .status-dot{
   width:6px;
   height:6px;
@@ -576,20 +670,13 @@ input:focus-visible{
   background:#4ade80;
   animation:pulse 2s infinite;
 }
+
 @keyframes pulse{
-  0%{
-    box-shadow:0 0 0 0 rgba(74,222,128,.5);
-  }
-  70%{
-    box-shadow:0 0 0 5px rgba(74,222,128,0);
-  }
-  100%{
-    box-shadow:0 0 0 0 rgba(74,222,128,0);
-  }
+  0%{box-shadow:0 0 0 0 rgba(74,222,128,.5)}
+  70%{box-shadow:0 0 0 5px rgba(74,222,128,0)}
+  100%{box-shadow:0 0 0 0 rgba(74,222,128,0)}
 }
-/* ============================================================
-   METRICS
-============================================================ */
+
 .metrics{
   display:flex;
   gap:6px;
@@ -598,6 +685,7 @@ input:focus-visible{
   background:#f7f9fb;
   flex:none;
 }
+
 .metric{
   flex:1;
   background:#fff;
@@ -606,21 +694,18 @@ input:focus-visible{
   padding:6px 7px;
   text-align:center;
 }
+
 .metric .v{
   font-size:16px;
   font-weight:700;
   color:#2a3744;
   font-variant-numeric:tabular-nums;
 }
-.metric .v.bad{
-  color:var(--by-red);
-}
-.metric .v.good{
-  color:var(--by-green-d);
-}
-.metric .v.warn{
-  color:var(--by-orange);
-}
+
+.metric .v.bad{color:var(--by-red)}
+.metric .v.good{color:var(--by-green-d)}
+.metric .v.warn{color:var(--by-orange)}
+
 .metric .k{
   font-size:9px;
   color:var(--ink-soft);
@@ -628,9 +713,7 @@ input:focus-visible{
   letter-spacing:.4px;
   margin-top:2px;
 }
-/* ============================================================
-   CHAT
-============================================================ */
+
 .chat{
   flex:1;
   overflow-y:auto;
@@ -640,6 +723,7 @@ input:focus-visible{
   gap:10px;
   background:#f4f6f9;
 }
+
 .msg{
   max-width:92%;
   font-size:12px;
@@ -649,12 +733,14 @@ input:focus-visible{
   white-space:pre-wrap;
   word-wrap:break-word;
 }
+
 .msg.user{
   align-self:flex-end;
   background:var(--by-blue);
   color:#fff;
   border-bottom-right-radius:3px;
 }
+
 .msg.bot{
   align-self:flex-start;
   background:#fff;
@@ -663,28 +749,35 @@ input:focus-visible{
   border-bottom-left-radius:3px;
   box-shadow:0 1px 1px rgba(0,0,0,.03);
 }
+
 .msg.bot b{
   color:#1f4e87;
 }
+
 .msg.bot .ok{
   color:var(--by-green-d);
   font-weight:700;
 }
+
 .msg.bot .wn{
   color:var(--by-orange);
   font-weight:700;
 }
+
 .msg.bot .er{
   color:var(--by-red);
   font-weight:700;
 }
+
 .msg.bot ul{
   margin:6px 0 2px;
   padding-left:17px;
 }
+
 .msg.bot li{
   margin:2px 0;
 }
+
 .typing{
   align-self:flex-start;
   background:#fff;
@@ -695,6 +788,7 @@ input:focus-visible{
   display:flex;
   gap:4px;
 }
+
 .typing span{
   width:6px;
   height:6px;
@@ -702,12 +796,10 @@ input:focus-visible{
   background:#b6c0cc;
   animation:bounce 1.2s infinite;
 }
-.typing span:nth-child(2){
-  animation-delay:.15s;
-}
-.typing span:nth-child(3){
-  animation-delay:.3s;
-}
+
+.typing span:nth-child(2){animation-delay:.15s}
+.typing span:nth-child(3){animation-delay:.3s}
+
 @keyframes bounce{
   0%,60%,100%{
     transform:translateY(0);
@@ -718,9 +810,7 @@ input:focus-visible{
     opacity:1;
   }
 }
-/* ============================================================
-   PLAN PREVIEW
-============================================================ */
+
 .plan-card{
   margin-top:8px;
   border:1px solid #cfdceb;
@@ -728,6 +818,7 @@ input:focus-visible{
   background:#f8fbff;
   overflow:hidden;
 }
+
 .plan-head{
   padding:7px 9px;
   background:#edf5ff;
@@ -737,47 +828,54 @@ input:focus-visible{
   justify-content:space-between;
   font-weight:700;
 }
+
 .plan-score{
   font-size:10px;
   color:var(--by-green-d);
 }
+
 .plan-change{
   padding:7px 9px;
   border-bottom:1px solid #e4ebf3;
 }
+
 .plan-change:last-child{
   border-bottom:0;
 }
+
 .plan-actions{
   display:flex;
   gap:6px;
   padding:8px;
   border-top:1px solid #d7e5f5;
 }
+
 .btn{
   border-radius:4px;
   padding:6px 10px;
   cursor:pointer;
   font-weight:600;
 }
+
 .btn-primary{
   background:var(--by-blue);
   color:#fff;
 }
+
 .btn-primary:hover{
   background:var(--by-blue-d);
 }
+
 .btn-secondary{
   background:#fff;
   border:1px solid var(--grid-strong);
   color:var(--ink);
 }
+
 .btn-secondary:hover{
   background:#f3f5f8;
 }
-/* ============================================================
-   CHIPS / COMPOSER
-============================================================ */
+
 .chips{
   display:flex;
   flex-wrap:wrap;
@@ -787,6 +885,7 @@ input:focus-visible{
   background:#fff;
   flex:none;
 }
+
 .chip{
   font-size:10.5px;
   color:var(--by-blue-d);
@@ -796,10 +895,12 @@ input:focus-visible{
   padding:4px 9px;
   cursor:pointer;
 }
+
 .chip:hover{
   background:#dcecfc;
   border-color:#b9d4f0;
 }
+
 .composer{
   display:flex;
   gap:7px;
@@ -808,6 +909,7 @@ input:focus-visible{
   background:#fff;
   flex:none;
 }
+
 .composer input{
   flex:1;
   min-width:0;
@@ -816,9 +918,11 @@ input:focus-visible{
   padding:8px 13px;
   outline:none;
 }
+
 .composer input:focus{
   border-color:var(--by-blue);
 }
+
 .send-btn{
   background:var(--by-blue);
   color:#fff;
@@ -831,12 +935,200 @@ input:focus-visible{
   justify-content:center;
   flex:none;
 }
+
 .send-btn:hover{
   background:var(--by-blue-d);
 }
+
 /* ============================================================
-   DETAIL DRAWER
+   GENERIC VIEWS
 ============================================================ */
+
+.view-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin-bottom:8px;
+}
+
+.kpi{
+  background:#fff;
+  border:1px solid var(--grid-strong);
+  border-radius:5px;
+  padding:13px;
+  box-shadow:var(--shadow);
+}
+
+.kpi-label{
+  color:var(--ink-soft);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.5px;
+}
+
+.kpi-value{
+  font-size:25px;
+  font-weight:700;
+  color:#263849;
+  margin-top:4px;
+}
+
+.kpi-sub{
+  color:var(--ink-light);
+  font-size:10px;
+  margin-top:3px;
+}
+
+.data-table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+}
+
+.data-table th{
+  background:#f4f6f9;
+  color:#647384;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.35px;
+  text-align:left;
+  padding:9px 10px;
+  border-bottom:1px solid var(--grid-strong);
+}
+
+.data-table td{
+  padding:9px 10px;
+  border-bottom:1px solid var(--grid);
+  font-size:11.5px;
+}
+
+.data-table tr:hover td{
+  background:#f8fbff;
+}
+
+.table-wrap{
+  overflow:auto;
+}
+
+.status{
+  display:inline-flex;
+  align-items:center;
+  border-radius:12px;
+  padding:3px 8px;
+  font-size:9.5px;
+  font-weight:700;
+}
+
+.status-blue{
+  color:var(--by-blue-d);
+  background:var(--info-bg);
+}
+
+.status-green{
+  color:var(--by-green-d);
+  background:var(--success-bg);
+}
+
+.status-orange{
+  color:#996000;
+  background:var(--warning-bg);
+}
+
+.status-red{
+  color:var(--by-red);
+  background:var(--danger-bg);
+}
+
+.status-gray{
+  color:#687585;
+  background:#edf0f3;
+}
+
+.section-grid{
+  display:grid;
+  grid-template-columns:1.5fr 1fr;
+  gap:8px;
+}
+
+.card-body{
+  padding:12px;
+}
+
+.progress{
+  height:7px;
+  background:#e8edf2;
+  border-radius:5px;
+  overflow:hidden;
+}
+
+.progress > span{
+  display:block;
+  height:100%;
+  background:var(--by-blue);
+  border-radius:5px;
+}
+
+.progress.green > span{
+  background:var(--by-green);
+}
+
+.progress.orange > span{
+  background:var(--by-orange);
+}
+
+.mini-row{
+  display:grid;
+  grid-template-columns:90px 1fr 45px;
+  gap:8px;
+  align-items:center;
+  padding:8px 0;
+  border-bottom:1px solid var(--grid);
+}
+
+.mini-row:last-child{
+  border-bottom:0;
+}
+
+.mini-label{
+  font-size:11px;
+  font-weight:600;
+}
+
+.mini-value{
+  text-align:right;
+  font-weight:700;
+}
+
+/* ============================================================
+   DASHBOARD
+============================================================ */
+
+.dashboard-header{
+  display:flex;
+  align-items:center;
+  margin-bottom:8px;
+}
+
+.dashboard-header h2{
+  margin:0;
+  font-size:18px;
+}
+
+.dashboard-header p{
+  margin:3px 0 0;
+  color:var(--ink-soft);
+}
+
+.dashboard-actions{
+  margin-left:auto;
+  display:flex;
+  gap:6px;
+}
+
+/* ============================================================
+   DRAWER
+============================================================ */
+
 .drawer{
   position:fixed;
   top:0;
@@ -851,9 +1143,11 @@ input:focus-visible{
   display:flex;
   flex-direction:column;
 }
+
 .drawer.open{
   transform:translateX(0);
 }
+
 .drawer-head{
   background:var(--by-navy);
   color:#fff;
@@ -861,10 +1155,12 @@ input:focus-visible{
   display:flex;
   align-items:center;
 }
+
 .drawer-title{
   font-size:15px;
   font-weight:700;
 }
+
 .drawer-close{
   margin-left:auto;
   background:transparent;
@@ -872,23 +1168,30 @@ input:focus-visible{
   font-size:18px;
   cursor:pointer;
 }
+
 .drawer-body{
   flex:1;
   overflow:auto;
   padding:14px;
 }
+
 .detail-row{
   display:flex;
   justify-content:space-between;
+  gap:20px;
   padding:9px 0;
   border-bottom:1px solid var(--grid);
 }
+
 .detail-key{
   color:var(--ink-soft);
 }
+
 .detail-value{
   font-weight:600;
+  text-align:right;
 }
+
 .status-pill{
   display:inline-flex;
   align-items:center;
@@ -897,21 +1200,26 @@ input:focus-visible{
   font-size:10px;
   font-weight:700;
 }
+
 .status-active{
   background:var(--info-bg);
   color:var(--by-blue-d);
 }
+
 .status-done{
   background:#edf0f3;
   color:#687585;
 }
+
 .status-conflict{
   background:var(--danger-bg);
   color:var(--by-red);
 }
+
 /* ============================================================
    TOAST
 ============================================================ */
+
 .toast-container{
   position:fixed;
   right:18px;
@@ -921,6 +1229,7 @@ input:focus-visible{
   flex-direction:column;
   gap:8px;
 }
+
 .toast{
   min-width:260px;
   max-width:360px;
@@ -931,15 +1240,11 @@ input:focus-visible{
   box-shadow:var(--shadow-lg);
   animation:toastIn .25s ease;
 }
-.toast.success{
-  border-left:4px solid var(--by-green);
-}
-.toast.warning{
-  border-left:4px solid var(--by-orange);
-}
-.toast.error{
-  border-left:4px solid var(--by-red);
-}
+
+.toast.success{border-left:4px solid var(--by-green)}
+.toast.warning{border-left:4px solid var(--by-orange)}
+.toast.error{border-left:4px solid var(--by-red)}
+
 @keyframes toastIn{
   from{
     opacity:0;
@@ -950,9 +1255,64 @@ input:focus-visible{
     transform:translateY(0);
   }
 }
+
+/* ============================================================
+   MODAL
+============================================================ */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(7,20,36,.48);
+  z-index:200;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+
+.modal-backdrop.open{
+  display:flex;
+}
+
+.modal{
+  width:min(700px,100%);
+  max-height:85vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:7px;
+  box-shadow:var(--shadow-lg);
+}
+
+.modal-head{
+  background:var(--by-navy);
+  color:#fff;
+  padding:13px 15px;
+  display:flex;
+  align-items:center;
+}
+
+.modal-title{
+  font-size:14px;
+  font-weight:700;
+}
+
+.modal-close{
+  margin-left:auto;
+  background:transparent;
+  color:#fff;
+  font-size:18px;
+  cursor:pointer;
+}
+
+.modal-body{
+  padding:15px;
+}
+
 /* ============================================================
    DEMO FLAG
 ============================================================ */
+
 .demo-flag{
   position:fixed;
   bottom:8px;
@@ -965,50 +1325,85 @@ input:focus-visible{
   z-index:50;
   pointer-events:none;
 }
+
 /* ============================================================
    RESPONSIVE
 ============================================================ */
-@media(max-width:1000px){
+
+@media(max-width:1100px){
   .ai-panel{
     width:360px;
   }
+
+  .view-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+
   .tb-item{
     display:none;
   }
 }
-@media(max-width:760px){
-  .main{
+
+@media(max-width:800px){
+  .doors-layout{
     flex-direction:column;
   }
+
   .doors-panel{
-    min-height:52vh;
+    min-height:55vh;
   }
+
   .ai-panel{
     width:100%;
-    min-height:360px;
+    min-height:420px;
   }
+
+  .section-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:600px){
+  .main{
+    padding:5px;
+  }
+
   .search{
     width:150px;
   }
+
+  .view-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .kpi-value{
+    font-size:20px;
+  }
+
   .drawer{
-    width:min(350px,100vw);
+    width:100%;
   }
 }
 </style>
 </head>
+
 <body>
+
 <div class="app">
+
 <!-- ==========================================================
      TOP BAR
 =========================================================== -->
+
 <header class="topbar">
+
   <div class="brand">
     <svg class="brand-logo" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <g fill="#ffffff">
         <path d="M12 2c.6 1.7.6 3.3 0 5-.6-1.7-.6-3.3 0-5z"/>
         <path d="M12 22c-.6-1.7-.6-3.3 0-5 .6 1.7.6 3.3 0 5z"/>
         <path d="M2 12c1.7-.6 3.3-.6 5 0-1.7.6-3.3 1.3-5 0z"/>
-        <path d="M22 12c-1.7.6-3.3.6-5 0 1.7.6 3.3.6 5 0z"/>
+        <path d="M22 12c-1.7.6-3.3-.6-5 0 1.7.6 3.3.6 5 0z"/>
       </g>
       <circle cx="12" cy="12" r="2.6" fill="#36b3e7"/>
       <g stroke="#9fdcf5" stroke-width="1.4" stroke-linecap="round">
@@ -1018,167 +1413,1208 @@ input:focus-visible{
         <line x1="17" y1="12" x2="20.5" y2="12"/>
       </g>
     </svg>
+
     BlueYonder
   </div>
+
   <div class="spacer"></div>
+
   <div class="tb-item caret">SUPER</div>
   <div class="tb-item">WMD1</div>
   <div class="tb-item">Workstation</div>
-  <button class="icon-btn" aria-label="Help">?</button>
+
+  <button class="icon-btn" id="helpBtn" aria-label="Help">?</button>
+
   <div class="search">
-    <input id="globalSearch" placeholder="Search shipments..." aria-label="Search shipments">
+    <input
+      id="globalSearch"
+      placeholder="Search shipments..."
+      aria-label="Search shipments"
+    >
     <span>⌕</span>
   </div>
+
 </header>
+
+
 <!-- ==========================================================
-     NAV
+     NAVIGATION
 =========================================================== -->
-<nav class="subnav">
+
+<nav class="subnav" id="mainNav">
+
   <div class="tab section">RECEIVING ▾</div>
-  <div class="tab">Receiving Dashboard</div>
-  <div class="tab active">Door Activity</div>
-  <div class="tab">Inbound Shipments</div>
-  <div class="tab">Vendor Quality</div>
-  <div class="tab">Work Queue</div>
-  <div class="tab">Inventory</div>
-  <div class="tab">Storage Rules Simulation</div>
-  <div class="tab">Appointments</div>
-  <div class="tab">Workflows</div>
-  <div class="tab">Check In</div>
-  <div class="tab">Staging</div>
-  <div class="tab">Transport Equipment</div>
-  <div class="tab">History</div>
+
+  <button class="tab" data-view="dashboard">
+    Receiving Dashboard
+  </button>
+
+  <button class="tab active" data-view="doors">
+    Door Activity
+  </button>
+
+  <button class="tab" data-view="shipments">
+    Inbound Shipments
+  </button>
+
+  <button class="tab" data-view="vendors">
+    Vendor Quality
+  </button>
+
+  <button class="tab" data-view="queue">
+    Work Queue
+  </button>
+
+  <button class="tab" data-view="inventory">
+    Inventory
+  </button>
+
+  <button class="tab" data-view="storage">
+    Storage Rules Simulation
+  </button>
+
+  <button class="tab" data-view="appointments">
+    Appointments
+  </button>
+
+  <button class="tab" data-view="workflows">
+    Workflows
+  </button>
+
+  <button class="tab" data-view="checkin">
+    Check In
+  </button>
+
+  <button class="tab" data-view="staging">
+    Staging
+  </button>
+
+  <button class="tab" data-view="equipment">
+    Transport Equipment
+  </button>
+
+  <button class="tab" data-view="history">
+    History
+  </button>
+
   <div class="more">»</div>
+
 </nav>
+
+
 <!-- ==========================================================
      TOOLBAR
 =========================================================== -->
+
 <div class="toolbar">
-  <h1>Door Activity</h1>
+
+  <h1 id="pageTitle">Door Activity</h1>
+
   <div class="spacer"></div>
+
   <div class="clock" id="clock">--:--</div>
-  <button class="t-icon" id="refreshBtn" title="Refresh">⟳</button>
-  <button class="t-icon" id="undoBtn" title="Undo last approved change">↶</button>
-  <button class="t-icon" id="auditBtn" title="Audit log">☷</button>
-  <button class="t-icon" id="expandBtn" title="Fullscreen">⤢</button>
+
+  <button class="t-icon" id="refreshBtn" title="Refresh">
+    ⟳
+  </button>
+
+  <button class="t-icon" id="undoBtn" title="Undo last approved change">
+    ↶
+  </button>
+
+  <button class="t-icon" id="auditBtn" title="Audit log">
+    ☷
+  </button>
+
+  <button class="t-icon" id="expandBtn" title="Fullscreen">
+    ⤢
+  </button>
+
 </div>
+
+
 <!-- ==========================================================
-     MAIN
+     MAIN WORKSPACE
 =========================================================== -->
+
 <main class="main">
+
+
 <!-- ==========================================================
-     DOORS
+     DASHBOARD VIEW
 =========================================================== -->
-<section class="doors-panel">
-  <div class="panel-hd">
-    <span class="title">Doors</span>
-    <div class="right">
-      <span class="panel-link" id="auditLink">Audit &gt;</span>
-      <span class="panel-link" id="expandTimeline">Expand Timeline »</span>
-    </div>
-  </div>
-  <div class="filters">
-    <select class="filter-select" id="typeFilter">
-      <option value="all">All doors</option>
-      <option value="in">Receiving</option>
-      <option value="out">Shipping</option>
-    </select>
-    <select class="filter-select" id="statusFilter">
-      <option value="all">All status</option>
-      <option value="active">Active</option>
-      <option value="conflict">Conflict</option>
-      <option value="done">Completed</option>
-    </select>
-    <button class="filter-btn" id="clearFilters" title="Clear filters">⌕</button>
-    <span class="star">★</span>
-  </div>
-  <div class="gantt-scroll" id="ganttScroll">
-    <div class="gantt">
-      <div class="time-head">
-        <div class="corner">
-          Today
-          <span class="nav">|◀ ◀ ▶</span>
-        </div>
-        <div class="hours" id="hours"></div>
-      </div>
-      <div id="rows"></div>
-    </div>
-  </div>
-</section>
-<!-- ==========================================================
-     AI PANEL
-=========================================================== -->
-<aside class="ai-panel">
-  <div class="ai-hd">
-    <div class="ai-av">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-           stroke="#fff" stroke-width="1.8"
-           stroke-linecap="round"
-           stroke-linejoin="round">
-        <rect x="4" y="8" width="16" height="11" rx="2.5"/>
-        <line x1="12" y1="8" x2="12" y2="4"/>
-        <circle cx="12" cy="3" r="1.4" fill="#fff"/>
-        <circle cx="9" cy="13" r="1.2" fill="#fff" stroke="none"/>
-        <circle cx="15" cy="13" r="1.2" fill="#fff" stroke="none"/>
-        <line x1="9.5" y1="16.5" x2="14.5" y2="16.5"/>
-      </svg>
-    </div>
+
+<section class="view hidden" id="view-dashboard">
+
+  <div class="dashboard-header">
+
     <div>
-      <div class="ai-title">Yard Planner AI</div>
-      <div class="ai-status">
-        <span class="status-dot"></span>
-        Online · planning engine active
+      <h2>Receiving Dashboard</h2>
+      <p>Warehouse operations overview for WMD1</p>
+    </div>
+
+    <div class="dashboard-actions">
+      <button class="btn btn-secondary" onclick="navigate('doors')">
+        Open Door Activity
+      </button>
+      <button class="btn btn-primary" onclick="navigate('queue')">
+        View Exceptions
+      </button>
+    </div>
+
+  </div>
+
+  <div class="view-grid">
+
+    <div class="kpi">
+      <div class="kpi-label">Active Doors</div>
+      <div class="kpi-value" id="dashActiveDoors">0</div>
+      <div class="kpi-sub">of 14 total doors</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Dock Utilization</div>
+      <div class="kpi-value" id="dashUtil">0%</div>
+      <div class="kpi-sub">current operating window</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Late Shipments</div>
+      <div class="kpi-value" id="dashLate">0</div>
+      <div class="kpi-sub">active appointments</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Conflicts</div>
+      <div class="kpi-value" id="dashConflicts">0</div>
+      <div class="kpi-sub">overlapping appointments</div>
+    </div>
+
+  </div>
+
+
+  <div class="section-grid">
+
+    <section class="panel">
+
+      <div class="panel-hd">
+        <span class="title">Door Utilization</span>
+        <span class="right">Live demo state</span>
+      </div>
+
+      <div class="card-body" id="dashboardDoors"></div>
+
+    </section>
+
+
+    <section class="panel">
+
+      <div class="panel-hd">
+        <span class="title">Priority Exceptions</span>
+        <span class="right">
+          <span class="panel-link" onclick="navigate('queue')">
+            View all
+          </span>
+        </span>
+      </div>
+
+      <div class="card-body" id="dashboardExceptions"></div>
+
+    </section>
+
+  </div>
+
+</section>
+
+
+<!-- ==========================================================
+     DOOR ACTIVITY VIEW
+=========================================================== -->
+
+<section class="view" id="view-doors">
+
+  <div class="doors-layout">
+
+    <section class="panel doors-panel">
+
+      <div class="panel-hd">
+
+        <span class="title">Doors</span>
+
+        <div class="right">
+          <span class="panel-link" id="auditLink">
+            Audit &gt;
+          </span>
+
+          <span class="panel-link" id="expandTimeline">
+            Expand Timeline »
+          </span>
+        </div>
+
+      </div>
+
+
+      <div class="filters">
+
+        <select class="filter-select" id="typeFilter">
+          <option value="all">All doors</option>
+          <option value="in">Receiving</option>
+          <option value="out">Shipping</option>
+        </select>
+
+        <select class="filter-select" id="statusFilter">
+          <option value="all">All status</option>
+          <option value="active">Active</option>
+          <option value="conflict">Conflict</option>
+          <option value="done">Completed</option>
+        </select>
+
+        <button
+          class="filter-btn"
+          id="clearFilters"
+          title="Clear filters"
+        >
+          ⌕
+        </button>
+
+        <span class="star">★</span>
+
+      </div>
+
+
+      <div class="gantt-scroll" id="ganttScroll">
+
+        <div class="gantt">
+
+          <div class="time-head">
+
+            <div class="corner">
+              Today
+              <span class="nav">|◀ ◀ ▶</span>
+            </div>
+
+            <div class="hours" id="hours"></div>
+
+          </div>
+
+          <div id="rows"></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ======================================================
+         AI PANEL
+    ======================================================= -->
+
+    <aside class="panel ai-panel">
+
+      <div class="ai-hd">
+
+        <div class="ai-av">
+
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#fff"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect x="4" y="8" width="16" height="11" rx="2.5"/>
+            <line x1="12" y1="8" x2="12" y2="4"/>
+            <circle cx="12" cy="3" r="1.4" fill="#fff"/>
+            <circle cx="9" cy="13" r="1.2" fill="#fff" stroke="none"/>
+            <circle cx="15" cy="13" r="1.2" fill="#fff" stroke="none"/>
+            <line x1="9.5" y1="16.5" x2="14.5" y2="16.5"/>
+          </svg>
+
+        </div>
+
+        <div>
+
+          <div class="ai-title">
+            Yard Planner AI
+          </div>
+
+          <div class="ai-status">
+            <span class="status-dot"></span>
+            Online · planning engine active
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="metrics">
+
+        <div class="metric">
+          <div class="v" id="m-util">—</div>
+          <div class="k">Dock Util</div>
+        </div>
+
+        <div class="metric">
+          <div class="v" id="m-late">—</div>
+          <div class="k">Late</div>
+        </div>
+
+        <div class="metric">
+          <div class="v" id="m-conf">—</div>
+          <div class="k">Conflicts</div>
+        </div>
+
+        <div class="metric">
+          <div class="v" id="m-score">—</div>
+          <div class="k">Plan Score</div>
+        </div>
+
+      </div>
+
+
+      <div class="chat" id="chat"></div>
+
+      <div class="chips" id="chips"></div>
+
+      <form class="composer" id="composer">
+
+        <input
+          id="input"
+          placeholder="Ask the AI to re-plan the yard..."
+          autocomplete="off"
+          aria-label="Ask Yard Planner AI"
+        >
+
+        <button
+          class="send-btn"
+          type="submit"
+          title="Send"
+          aria-label="Send"
+        >
+          ➤
+        </button>
+
+      </form>
+
+    </aside>
+
+  </div>
+
+</section>
+
+
+<!-- ==========================================================
+     SHIPMENTS
+=========================================================== -->
+
+<section class="view hidden" id="view-shipments">
+
+  <section class="panel">
+
+    <div class="panel-hd">
+      <span class="title">Inbound Shipments</span>
+
+      <div class="right">
+        <span>
+          <span id="shipmentCount">0</span> records
+        </span>
       </div>
     </div>
+
+    <div class="filters">
+
+      <select class="filter-select" id="shipmentTypeFilter">
+        <option value="all">All workflows</option>
+        <option value="receiving">Receiving</option>
+        <option value="shipping">Shipping</option>
+      </select>
+
+      <select class="filter-select" id="shipmentStatusFilter">
+        <option value="all">All status</option>
+        <option value="active">Active</option>
+        <option value="late">Late</option>
+        <option value="conflict">Conflict</option>
+        <option value="completed">Completed</option>
+      </select>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table class="data-table">
+
+        <thead>
+          <tr>
+            <th>Shipment</th>
+            <th>Door</th>
+            <th>Workflow</th>
+            <th>Appointment</th>
+            <th>Status</th>
+            <th>Exceptions</th>
+          </tr>
+        </thead>
+
+        <tbody id="shipmentsTable"></tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</section>
+
+
+<!-- ==========================================================
+     VENDOR QUALITY
+=========================================================== -->
+
+<section class="view hidden" id="view-vendors">
+
+  <div class="view-grid">
+
+    <div class="kpi">
+      <div class="kpi-label">Vendors</div>
+      <div class="kpi-value">24</div>
+      <div class="kpi-sub">active receiving vendors</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">On Time</div>
+      <div class="kpi-value">91%</div>
+      <div class="kpi-sub">appointment adherence</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Late Loads</div>
+      <div class="kpi-value" id="vendorLate">0</div>
+      <div class="kpi-sub">current schedule</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Quality Holds</div>
+      <div class="kpi-value">7</div>
+      <div class="kpi-sub">demo inventory exceptions</div>
+    </div>
+
   </div>
-  <div class="metrics">
-    <div class="metric">
-      <div class="v" id="m-util">—</div>
-      <div class="k">Dock Util</div>
+
+
+  <section class="panel">
+
+    <div class="panel-hd">
+      <span class="title">Vendor Performance</span>
     </div>
-    <div class="metric">
-      <div class="v" id="m-late">—</div>
-      <div class="k">Late</div>
+
+    <div class="table-wrap">
+
+      <table class="data-table">
+
+        <thead>
+          <tr>
+            <th>Vendor</th>
+            <th>Loads</th>
+            <th>On Time</th>
+            <th>Quality</th>
+            <th>Late Loads</th>
+            <th>Trend</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td><b>Northstar Foods</b></td>
+            <td>42</td>
+            <td>96%</td>
+            <td><span class="status status-green">Good</span></td>
+            <td>2</td>
+            <td>↑</td>
+          </tr>
+
+          <tr>
+            <td><b>Delta Industrial</b></td>
+            <td>38</td>
+            <td>89%</td>
+            <td><span class="status status-green">Good</span></td>
+            <td>4</td>
+            <td>→</td>
+          </tr>
+
+          <tr>
+            <td><b>Metro Supply</b></td>
+            <td>31</td>
+            <td>82%</td>
+            <td><span class="status status-orange">Watch</span></td>
+            <td>6</td>
+            <td>↓</td>
+          </tr>
+
+          <tr>
+            <td><b>Southern Distribution</b></td>
+            <td>29</td>
+            <td>94%</td>
+            <td><span class="status status-green">Good</span></td>
+            <td>2</td>
+            <td>↑</td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
     </div>
-    <div class="metric">
-      <div class="v" id="m-conf">—</div>
-      <div class="k">Conflicts</div>
+
+  </section>
+
+</section>
+
+
+<!-- ==========================================================
+     WORK QUEUE
+=========================================================== -->
+
+<section class="view hidden" id="view-queue">
+
+  <div class="view-grid">
+
+    <div class="kpi">
+      <div class="kpi-label">Open Tasks</div>
+      <div class="kpi-value" id="queueOpen">0</div>
+      <div class="kpi-sub">requires action</div>
     </div>
-    <div class="metric">
-      <div class="v" id="m-score">—</div>
-      <div class="k">Plan Score</div>
+
+    <div class="kpi">
+      <div class="kpi-label">Critical</div>
+      <div class="kpi-value" id="queueCritical">0</div>
+      <div class="kpi-sub">priority exceptions</div>
     </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Late Loads</div>
+      <div class="kpi-value" id="queueLate">0</div>
+      <div class="kpi-sub">current appointments</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Conflicts</div>
+      <div class="kpi-value" id="queueConflict">0</div>
+      <div class="kpi-sub">door scheduling</div>
+    </div>
+
   </div>
-  <div class="chat" id="chat"></div>
-  <div class="chips" id="chips"></div>
-  <form class="composer" id="composer">
-    <input
-      id="input"
-      placeholder="Ask the AI to re-plan the yard..."
-      autocomplete="off"
-      aria-label="Ask Yard Planner AI"
-    >
-    <button
-      class="send-btn"
-      id="send"
-      type="submit"
-      title="Send"
-      aria-label="Send"
-    >
-      ➤
-    </button>
-  </form>
-</aside>
+
+
+  <section class="panel">
+
+    <div class="panel-hd">
+      <span class="title">Operational Work Queue</span>
+    </div>
+
+    <div class="table-wrap">
+
+      <table class="data-table">
+
+        <thead>
+          <tr>
+            <th>Priority</th>
+            <th>Issue</th>
+            <th>Shipment</th>
+            <th>Door</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody id="queueTable"></tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</section>
+
+
+<!-- ==========================================================
+     INVENTORY
+=========================================================== -->
+
+<section class="view hidden" id="view-inventory">
+
+  <div class="view-grid">
+
+    <div class="kpi">
+      <div class="kpi-label">SKUs</div>
+      <div class="kpi-value">18,420</div>
+      <div class="kpi-sub">warehouse inventory</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Pallets</div>
+      <div class="kpi-value">7,842</div>
+      <div class="kpi-sub">current position count</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Capacity</div>
+      <div class="kpi-value">78%</div>
+      <div class="kpi-sub">storage utilization</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Holds</div>
+      <div class="kpi-value">63</div>
+      <div class="kpi-sub">inventory exceptions</div>
+    </div>
+
+  </div>
+
+
+  <section class="panel">
+
+    <div class="panel-hd">
+      <span class="title">Inventory Zones</span>
+    </div>
+
+    <div class="card-body">
+
+      <div class="mini-row">
+        <div class="mini-label">A01</div>
+        <div class="progress"><span style="width:82%"></span></div>
+        <div class="mini-value">82%</div>
+      </div>
+
+      <div class="mini-row">
+        <div class="mini-label">A02</div>
+        <div class="progress"><span style="width:74%"></span></div>
+        <div class="mini-value">74%</div>
+      </div>
+
+      <div class="mini-row">
+        <div class="mini-label">B01</div>
+        <div class="progress green"><span style="width:61%"></span></div>
+        <div class="mini-value">61%</div>
+      </div>
+
+      <div class="mini-row">
+        <div class="mini-label">B02</div>
+        <div class="progress orange"><span style="width:91%"></span></div>
+        <div class="mini-value">91%</div>
+      </div>
+
+    </div>
+
+  </section>
+
+</section>
+
+
+<!-- ==========================================================
+     STORAGE RULES
+=========================================================== -->
+
+<section class="view hidden" id="view-storage">
+
+  <div class="view-grid">
+
+    <div class="kpi">
+      <div class="kpi-label">Rules</div>
+      <div class="kpi-value">37</div>
+      <div class="kpi-sub">active storage rules</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Violations</div>
+      <div class="kpi-value">12</div>
+      <div class="kpi-sub">demo simulation</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Capacity</div>
+      <div class="kpi-value">78%</div>
+      <div class="kpi-sub">warehouse utilization</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Moves</div>
+      <div class="kpi-value">146</div>
+      <div class="kpi-sub">recommended relocations</div>
+    </div>
+
+  </div>
+
+
+  <section class="panel">
+
+    <div class="panel-hd">
+      <span class="title">Storage Rules Simulation</span>
+
+      <div class="right">
+        <button
+          class="btn btn-primary"
+          onclick="toast('Storage simulation generated','success')"
+        >
+          Run Simulation
+        </button>
+      </div>
+
+    </div>
+
+    <div class="card-body">
+
+      <div class="mini-row">
+        <div class="mini-label">Velocity</div>
+        <div class="progress"><span style="width:84%"></span></div>
+        <div class="mini-value">84%</div>
+      </div>
+
+      <div class="mini-row">
+        <div class="mini-label">Cube</div>
+        <div class="progress"><span style="width:72%"></span></div>
+        <div class="mini-value">72%</div>
+      </div>
+
+      <div class="mini-row">
+        <div class="mini-label">Compatibility</div>
+        <div class="progress green"><span style="width:94%"></span></div>
+        <div class="mini-value">94%</div>
+      </div>
+
+    </div>
+
+  </section>
+
+</section>
+
+
+<!-- ==========================================================
+     APPOINTMENTS
+=========================================================== -->
+
+<section class="view hidden" id="view-appointments">
+
+  <section class="panel">
+
+    <div class="panel-hd">
+
+      <span class="title">Appointments</span>
+
+      <div class="right">
+        <button
+          class="btn btn-primary"
+          onclick="toast('Appointment creation workflow opened','success')"
+        >
+          + New Appointment
+        </button>
+      </div>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table class="data-table">
+
+        <thead>
+          <tr>
+            <th>Shipment</th>
+            <th>Door</th>
+            <th>Appointment</th>
+            <th>Workflow</th>
+            <th>Status</th>
+            <th>Exception</th>
+          </tr>
+        </thead>
+
+        <tbody id="appointmentsTable"></tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</section>
+
+
+<!-- ==========================================================
+     WORKFLOWS
+=========================================================== -->
+
+<section class="view hidden" id="view-workflows">
+
+  <div class="section-grid">
+
+    <section class="panel">
+
+      <div class="panel-hd">
+        <span class="title">Receiving Workflow</span>
+      </div>
+
+      <div class="card-body">
+
+        <div class="mini-row">
+          <div class="mini-label">Check In</div>
+          <div class="progress green"><span style="width:92%"></span></div>
+          <div class="mini-value">92%</div>
+        </div>
+
+        <div class="mini-row">
+          <div class="mini-label">Unload</div>
+          <div class="progress"><span style="width:76%"></span></div>
+          <div class="mini-value">76%</div>
+        </div>
+
+        <div class="mini-row">
+          <div class="mini-label">Inspect</div>
+          <div class="progress"><span style="width:68%"></span></div>
+          <div class="mini-value">68%</div>
+        </div>
+
+        <div class="mini-row">
+          <div class="mini-label">Putaway</div>
+          <div class="progress"><span style="width:57%"></span></div>
+          <div class="mini-value">57%</div>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="panel">
+
+      <div class="panel-hd">
+        <span class="title">Workflow Exceptions</span>
+      </div>
+
+      <div class="card-body" id="workflowExceptions"></div>
+
+    </section>
+
+  </div>
+
+</section>
+
+
+<!-- ==========================================================
+     CHECK IN
+=========================================================== -->
+
+<section class="view hidden" id="view-checkin">
+
+  <section class="panel">
+
+    <div class="panel-hd">
+      <span class="title">Carrier Check In</span>
+    </div>
+
+    <div class="card-body">
+
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+
+        <label>
+          <div style="margin-bottom:5px;color:#6b7785">
+            Carrier
+          </div>
+
+          <input
+            id="checkinCarrier"
+            placeholder="Carrier name"
+            style="width:100%;padding:9px;border:1px solid #cfd6df;border-radius:4px"
+          >
+        </label>
+
+
+        <label>
+          <div style="margin-bottom:5px;color:#6b7785">
+            Trailer
+          </div>
+
+          <input
+            id="checkinTrailer"
+            placeholder="Trailer number"
+            style="width:100%;padding:9px;border:1px solid #cfd6df;border-radius:4px"
+          >
+        </label>
+
+
+        <label>
+          <div style="margin-bottom:5px;color:#6b7785">
+            Shipment
+          </div>
+
+          <input
+            id="checkinShipment"
+            placeholder="S12"
+            style="width:100%;padding:9px;border:1px solid #cfd6df;border-radius:4px"
+          >
+        </label>
+
+
+        <label>
+          <div style="margin-bottom:5px;color:#6b7785">
+            Door
+          </div>
+
+          <select
+            id="checkinDoor"
+            style="width:100%;padding:9px;border:1px solid #cfd6df;border-radius:4px"
+          >
+            ${CONFIG.DOORS.map(d=>`<option>${d}</option>`).join("")}
+          </select>
+        </label>
+
+      </div>
+
+
+      <div style="margin-top:16px">
+
+        <button
+          class="btn btn-primary"
+          id="checkinBtn"
+        >
+          Check In Carrier
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</section>
+
+
+<!-- ==========================================================
+     STAGING
+=========================================================== -->
+
+<section class="view hidden" id="view-staging">
+
+  <div class="view-grid">
+
+    <div class="kpi">
+      <div class="kpi-label">Staging Lanes</div>
+      <div class="kpi-value">18</div>
+      <div class="kpi-sub">configured lanes</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Occupied</div>
+      <div class="kpi-value">13</div>
+      <div class="kpi-sub">active staging positions</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">Available</div>
+      <div class="kpi-value">5</div>
+      <div class="kpi-sub">open positions</div>
+    </div>
+
+    <div class="kpi">
+      <div class="kpi-label">At Risk</div>
+      <div class="kpi-value">2</div>
+      <div class="kpi-sub">aging loads</div>
+    </div>
+
+  </div>
+
+
+  <section class="panel">
+
+    <div class="panel-hd">
+      <span class="title">Staging Lanes</span>
+    </div>
+
+    <div class="table-wrap">
+
+      <table class="data-table">
+
+        <thead>
+          <tr>
+            <th>Lane</th>
+            <th>Shipment</th>
+            <th>Capacity</th>
+            <th>Age</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td><b>STG-01</b></td>
+            <td>S12</td>
+            <td>8 / 10 pallets</td>
+            <td>42 min</td>
+            <td><span class="status status-blue">Active</span></td>
+          </tr>
+
+          <tr>
+            <td><b>STG-02</b></td>
+            <td>S13</td>
+            <td>10 / 10 pallets</td>
+            <td>71 min</td>
+            <td><span class="status status-orange">Full</span></td>
+          </tr>
+
+          <tr>
+            <td><b>STG-03</b></td>
+            <td>S20</td>
+            <td>4 / 10 pallets</td>
+            <td>18 min</td>
+            <td><span class="status status-green">Available</span></td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</section>
+
+
+<!-- ==========================================================
+     EQUIPMENT
+=========================================================== -->
+
+<section class="view hidden" id="view-equipment">
+
+  <section class="panel">
+
+    <div class="panel-hd">
+      <span class="title">Transport Equipment</span>
+    </div>
+
+    <div class="table-wrap">
+
+      <table class="data-table">
+
+        <thead>
+          <tr>
+            <th>Equipment</th>
+            <th>Type</th>
+            <th>Location</th>
+            <th>Status</th>
+            <th>Assignment</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td><b>TRL-1042</b></td>
+            <td>Trailer</td>
+            <td>Door 3</td>
+            <td><span class="status status-blue">Loading</span></td>
+            <td>S3</td>
+          </tr>
+
+          <tr>
+            <td><b>TRL-2219</b></td>
+            <td>Trailer</td>
+            <td>Yard</td>
+            <td><span class="status status-green">Available</span></td>
+            <td>Unassigned</td>
+          </tr>
+
+          <tr>
+            <td><b>YRD-778</b></td>
+            <td>Yard Tractor</td>
+            <td>South Yard</td>
+            <td><span class="status status-green">Available</span></td>
+            <td>Yard Pool</td>
+          </tr>
+
+          <tr>
+            <td><b>YRD-801</b></td>
+            <td>Yard Tractor</td>
+            <td>Door 11</td>
+            <td><span class="status status-orange">Assigned</span></td>
+            <td>S21</td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</section>
+
+
+<!-- ==========================================================
+     HISTORY
+=========================================================== -->
+
+<section class="view hidden" id="view-history">
+
+  <section class="panel">
+
+    <div class="panel-hd">
+
+      <span class="title">
+        Operational History & Audit
+      </span>
+
+      <div class="right">
+        Demo audit trail
+      </div>
+
+    </div>
+
+    <div class="table-wrap">
+
+      <table class="data-table">
+
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Event</th>
+            <th>Object</th>
+            <th>Operator</th>
+            <th>Result</th>
+          </tr>
+        </thead>
+
+        <tbody id="historyTable"></tbody>
+
+      </table>
+
+    </div>
+
+  </section>
+
+</section>
+
 </main>
+
 </div>
+
+
 <!-- ==========================================================
      SHIPMENT DRAWER
 =========================================================== -->
+
 <aside class="drawer" id="drawer">
+
   <div class="drawer-head">
+
     <div class="drawer-title" id="drawerTitle">
       Shipment
     </div>
+
     <button
       class="drawer-close"
       id="drawerClose"
@@ -1186,96 +2622,580 @@ input:focus-visible{
     >
       ×
     </button>
+
   </div>
+
   <div class="drawer-body" id="drawerBody"></div>
+
 </aside>
+
+
+<!-- ==========================================================
+     MODAL
+=========================================================== -->
+
+<div class="modal-backdrop" id="modalBackdrop">
+
+  <div class="modal">
+
+    <div class="modal-head">
+
+      <div class="modal-title" id="modalTitle">
+        Help
+      </div>
+
+      <button class="modal-close" id="modalClose">
+        ×
+      </button>
+
+    </div>
+
+    <div class="modal-body" id="modalBody"></div>
+
+  </div>
+
+</div>
+
+
 <!-- ==========================================================
      TOASTS
 =========================================================== -->
+
 <div class="toast-container" id="toastContainer"></div>
+
 <div class="demo-flag">
   Interactive prototype · Demo data · No live WMS connection
 </div>
+
+
 <script>
+
 /* ============================================================
    CONFIGURATION
 ============================================================ */
+
 const CONFIG = {
-  START_HR: 4,
-  END_HR: 20,
-  COL_W: 74,
-  DOORS: [
-    "Door 1","Door 2","Door 3","Door 4","Door 5","Door 6","Door 7",
-    "Door 8","Door 9","Door 10","Door 11","Door 12","Door 13","Door 14"
+
+  START_HR:4,
+
+  END_HR:20,
+
+  COL_W:74,
+
+  DOORS:[
+    "Door 1",
+    "Door 2",
+    "Door 3",
+    "Door 4",
+    "Door 5",
+    "Door 6",
+    "Door 7",
+    "Door 8",
+    "Door 9",
+    "Door 10",
+    "Door 11",
+    "Door 12",
+    "Door 13",
+    "Door 14"
   ]
+
 };
+
+
+/* ============================================================
+   PAGE ROUTES
+============================================================ */
+
+const ROUTES = {
+
+  dashboard:{
+    title:"Receiving Dashboard"
+  },
+
+  doors:{
+    title:"Door Activity"
+  },
+
+  shipments:{
+    title:"Inbound Shipments"
+  },
+
+  vendors:{
+    title:"Vendor Quality"
+  },
+
+  queue:{
+    title:"Work Queue"
+  },
+
+  inventory:{
+    title:"Inventory"
+  },
+
+  storage:{
+    title:"Storage Rules Simulation"
+  },
+
+  appointments:{
+    title:"Appointments"
+  },
+
+  workflows:{
+    title:"Workflows"
+  },
+
+  checkin:{
+    title:"Check In"
+  },
+
+  staging:{
+    title:"Staging"
+  },
+
+  equipment:{
+    title:"Transport Equipment"
+  },
+
+  history:{
+    title:"History"
+  }
+
+};
+
+
 /* ============================================================
    DATA
 ============================================================ */
+
 let SHIP = [
-  {id:"S1",code:"S1",door:"Door 1",start:4,end:5.4,type:"in",
-   tags:[{t:"Late",c:"red"},{t:"Over",c:"slate"},{t:"Safety",c:"red"}]},
-  {id:"S2",code:"S2",door:"Door 1",start:9.7,end:10.4,type:"done",tags:[]},
-  {id:"S3",code:"S3",door:"Door 3",start:7.6,end:8.2,type:"in",tags:[]},
-  {id:"S4",code:"S4",door:"Door 3",start:12,end:12.7,type:"in",tags:[]},
-  {id:"S5",code:"S5",door:"Door 4",start:9,end:9.7,type:"in",tags:[]},
-  {id:"S6",code:"S6",door:"Door 5",start:4,end:5.4,type:"done",tags:[]},
-  {id:"S7",code:"S7",door:"Door 5",start:7.8,end:9.6,type:"in",tags:[]},
-  {id:"S8",code:"S8",door:"Door 6",start:4,end:5.3,type:"in",
-   tags:[{t:"Late",c:"red"},{t:"Over",c:"slate"}]},
-  {id:"S9",code:"S9",door:"Door 6",start:8.4,end:10,type:"in",
-   tags:[{t:"Unit",c:"gray"}]},
-  {id:"S10",code:"S10",door:"Door 7",start:4,end:5,type:"done",tags:[]},
-  {id:"S11",code:"S11",door:"Door 8",start:4,end:5.2,type:"done",tags:[]},
-  {id:"S12",code:"S12",door:"Door 8",start:7.5,end:8.3,type:"out",
-   tags:[{t:"Late",c:"red"}]},
-  {id:"S13",code:"S13",door:"Door 8",start:8,end:8.9,type:"out",
-   tags:[{t:"Late",c:"red"}]},
-  {id:"S14",code:"S14",door:"Door 9",start:4,end:5.1,type:"done",
-   tags:[{t:"Suspended",c:"slate"},{t:"Over",c:"slate"}]},
-  {id:"S15",code:"S15",door:"Door 9",start:9,end:9.8,type:"out",tags:[]},
-  {id:"S16",code:"S16",door:"Door 9",start:12,end:12.8,type:"out",tags:[]},
-  {id:"S17",code:"S17",door:"Door 10",start:4,end:5.1,type:"done",tags:[]},
-  {id:"S18",code:"S18",door:"Door 10",start:8.4,end:9.2,type:"out",tags:[]},
-  {id:"S19",code:"S19",door:"Door 11",start:4,end:5.2,type:"done",
-   tags:[{t:"Dispatch",c:"gray"},{t:"Late",c:"red"}]},
-  {id:"S20",code:"S20",door:"Door 11",start:7.6,end:8.5,type:"out",
-   tags:[{t:"Link",c:"gray"}]},
-  {id:"S21",code:"S21",door:"Door 11",start:8.1,end:9,type:"out",
-   tags:[{t:"Short",c:"amber"},{t:"Late",c:"red"}]},
-  {id:"S22",code:"S22",door:"Door 11",start:11.6,end:12.6,type:"out",
-   tags:[{t:"Short",c:"amber"},{t:"Late",c:"red"}]},
-  {id:"S23",code:"S23",door:"Door 12",start:4,end:5.2,type:"done",tags:[]},
-  {id:"S24",code:"S24",door:"Door 12",start:8.8,end:9.5,type:"out",tags:[]},
-  {id:"S25",code:"S25",door:"Door 12",start:10.6,end:11.4,type:"out",
-   tags:[{t:"Late",c:"red"}]},
-  {id:"S26",code:"S26",door:"Door 13",start:4,end:5.4,type:"done",
-   tags:[{t:"Late",c:"red"},{t:"Over",c:"slate"}]},
-  {id:"S27",code:"S27",door:"Door 13",start:9.4,end:10.2,type:"out",
-   tags:[{t:"Late",c:"red"}]},
-  {id:"S28",code:"S28",door:"Door 14",start:4,end:5.3,type:"done",tags:[]},
-  {id:"S29",code:"S29",door:"Door 3",start:14.5,end:15.6,type:"in",tags:[]},
-  {id:"S30",code:"S30",door:"Door 6",start:13.2,end:14,type:"in",tags:[]},
-  {id:"S31",code:"S31",door:"Door 8",start:15,end:16,type:"out",
-   tags:[{t:"Hot",c:"amber"}]},
-  {id:"S32",code:"S32",door:"Door 10",start:13,end:13.8,type:"out",tags:[]},
-  {id:"S33",code:"S33",door:"Door 12",start:16.5,end:17.6,type:"out",tags:[]},
-  {id:"S34",code:"S34",door:"Door 14",start:14,end:15,type:"out",
-   tags:[{t:"Late",c:"red"}]}
+
+  {
+    id:"S1",
+    code:"S1",
+    door:"Door 1",
+    start:4,
+    end:5.4,
+    type:"in",
+    tags:[
+      {t:"Late",c:"red"},
+      {t:"Over",c:"slate"},
+      {t:"Safety",c:"red"}
+    ]
+  },
+
+  {
+    id:"S2",
+    code:"S2",
+    door:"Door 1",
+    start:9.7,
+    end:10.4,
+    type:"done",
+    tags:[]
+  },
+
+  {
+    id:"S3",
+    code:"S3",
+    door:"Door 3",
+    start:7.6,
+    end:8.2,
+    type:"in",
+    tags:[]
+  },
+
+  {
+    id:"S4",
+    code:"S4",
+    door:"Door 3",
+    start:12,
+    end:12.7,
+    type:"in",
+    tags:[]
+  },
+
+  {
+    id:"S5",
+    code:"S5",
+    door:"Door 4",
+    start:9,
+    end:9.7,
+    type:"in",
+    tags:[]
+  },
+
+  {
+    id:"S6",
+    code:"S6",
+    door:"Door 5",
+    start:4,
+    end:5.4,
+    type:"done",
+    tags:[]
+  },
+
+  {
+    id:"S7",
+    code:"S7",
+    door:"Door 5",
+    start:7.8,
+    end:9.6,
+    type:"in",
+    tags:[]
+  },
+
+  {
+    id:"S8",
+    code:"S8",
+    door:"Door 6",
+    start:4,
+    end:5.3,
+    type:"in",
+    tags:[
+      {t:"Late",c:"red"},
+      {t:"Over",c:"slate"}
+    ]
+  },
+
+  {
+    id:"S9",
+    code:"S9",
+    door:"Door 6",
+    start:8.4,
+    end:10,
+    type:"in",
+    tags:[
+      {t:"Unit",c:"gray"}
+    ]
+  },
+
+  {
+    id:"S10",
+    code:"S10",
+    door:"Door 7",
+    start:4,
+    end:5,
+    type:"done",
+    tags:[]
+  },
+
+  {
+    id:"S11",
+    code:"S11",
+    door:"Door 8",
+    start:4,
+    end:5.2,
+    type:"done",
+    tags:[]
+  },
+
+  {
+    id:"S12",
+    code:"S12",
+    door:"Door 8",
+    start:7.5,
+    end:8.3,
+    type:"out",
+    tags:[
+      {t:"Late",c:"red"}
+    ]
+  },
+
+  {
+    id:"S13",
+    code:"S13",
+    door:"Door 8",
+    start:8,
+    end:8.9,
+    type:"out",
+    tags:[
+      {t:"Late",c:"red"}
+    ]
+  },
+
+  {
+    id:"S14",
+    code:"S14",
+    door:"Door 9",
+    start:4,
+    end:5.1,
+    type:"done",
+    tags:[
+      {t:"Suspended",c:"slate"},
+      {t:"Over",c:"slate"}
+    ]
+  },
+
+  {
+    id:"S15",
+    code:"S15",
+    door:"Door 9",
+    start:9,
+    end:9.8,
+    type:"out",
+    tags:[]
+  },
+
+  {
+    id:"S16",
+    code:"S16",
+    door:"Door 9",
+    start:12,
+    end:12.8,
+    type:"out",
+    tags:[]
+  },
+
+  {
+    id:"S17",
+    code:"S17",
+    door:"Door 10",
+    start:4,
+    end:5.1,
+    type:"done",
+    tags:[]
+  },
+
+  {
+    id:"S18",
+    code:"S18",
+    door:"Door 10",
+    start:8.4,
+    end:9.2,
+    type:"out",
+    tags:[]
+  },
+
+  {
+    id:"S19",
+    code:"S19",
+    door:"Door 11",
+    start:4,
+    end:5.2,
+    type:"done",
+    tags:[
+      {t:"Dispatch",c:"gray"},
+      {t:"Late",c:"red"}
+    ]
+  },
+
+  {
+    id:"S20",
+    code:"S20",
+    door:"Door 11",
+    start:7.6,
+    end:8.5,
+    type:"out",
+    tags:[
+      {t:"Link",c:"gray"}
+    ]
+  },
+
+  {
+    id:"S21",
+    code:"S21",
+    door:"Door 11",
+    start:8.1,
+    end:9,
+    type:"out",
+    tags:[
+      {t:"Short",c:"amber"},
+      {t:"Late",c:"red"}
+    ]
+  },
+
+  {
+    id:"S22",
+    code:"S22",
+    door:"Door 11",
+    start:11.6,
+    end:12.6,
+    type:"out",
+    tags:[
+      {t:"Short",c:"amber"},
+      {t:"Late",c:"red"}
+    ]
+  },
+
+  {
+    id:"S23",
+    code:"S23",
+    door:"Door 12",
+    start:4,
+    end:5.2,
+    type:"done",
+    tags:[]
+  },
+
+  {
+    id:"S24",
+    code:"S24",
+    door:"Door 12",
+    start:8.8,
+    end:9.5,
+    type:"out",
+    tags:[]
+  },
+
+  {
+    id:"S25",
+    code:"S25",
+    door:"Door 12",
+    start:10.6,
+    end:11.4,
+    type:"out",
+    tags:[
+      {t:"Late",c:"red"}
+    ]
+  },
+
+  {
+    id:"S26",
+    code:"S26",
+    door:"Door 13",
+    start:4,
+    end:5.4,
+    type:"done",
+    tags:[
+      {t:"Late",c:"red"},
+      {t:"Over",c:"slate"}
+    ]
+  },
+
+  {
+    id:"S27",
+    code:"S27",
+    door:"Door 13",
+    start:9.4,
+    end:10.2,
+    type:"out",
+    tags:[
+      {t:"Late",c:"red"}
+    ]
+  },
+
+  {
+    id:"S28",
+    code:"S28",
+    door:"Door 14",
+    start:4,
+    end:5.3,
+    type:"done",
+    tags:[]
+  },
+
+  {
+    id:"S29",
+    code:"S29",
+    door:"Door 3",
+    start:14.5,
+    end:15.6,
+    type:"in",
+    tags:[]
+  },
+
+  {
+    id:"S30",
+    code:"S30",
+    door:"Door 6",
+    start:13.2,
+    end:14,
+    type:"in",
+    tags:[]
+  },
+
+  {
+    id:"S31",
+    code:"S31",
+    door:"Door 8",
+    start:15,
+    end:16,
+    type:"out",
+    tags:[
+      {t:"Hot",c:"amber"}
+    ]
+  },
+
+  {
+    id:"S32",
+    code:"S32",
+    door:"Door 10",
+    start:13,
+    end:13.8,
+    type:"out",
+    tags:[]
+  },
+
+  {
+    id:"S33",
+    code:"S33",
+    door:"Door 12",
+    start:16.5,
+    end:17.6,
+    type:"out",
+    tags:[]
+  },
+
+  {
+    id:"S34",
+    code:"S34",
+    door:"Door 14",
+    start:14,
+    end:15,
+    type:"out",
+    tags:[
+      {t:"Late",c:"red"}
+    ]
+  }
+
 ];
+
 const ORIGINAL = structuredClone(SHIP);
+
 let historyStack = [];
+
 let pendingPlan = null;
+
 let selectedShipment = null;
+
+let currentView = "doors";
+
 let filters = {
   type:"all",
   status:"all",
   search:""
 };
+
+let auditEvents = [
+  {
+    time:"Today 07:42",
+    event:"Door schedule loaded",
+    object:"WMD1",
+    operator:"Demo Operator",
+    result:"Success"
+  },
+  {
+    time:"Today 08:05",
+    event:"Late shipment detected",
+    object:"S8",
+    operator:"Yard Planner",
+    result:"Exception created"
+  },
+  {
+    time:"Today 08:16",
+    event:"Conflict detected",
+    object:"S20 / S21",
+    operator:"Yard Planner",
+    result:"Exception created"
+  }
+];
+
+
 /* ============================================================
    DOM
 ============================================================ */
+
 const $ = id => document.getElementById(id);
+
 const hoursEl = $("hours");
 const rowsEl = $("rows");
 const chat = $("chat");
@@ -1283,379 +3203,973 @@ const input = $("input");
 const drawer = $("drawer");
 const drawerBody = $("drawerBody");
 const drawerTitle = $("drawerTitle");
+
+
 /* ============================================================
-   UTILITIES
+   UTILITY
 ============================================================ */
+
 function isRecv(door){
+
   return CONFIG.DOORS.indexOf(door) < 7;
+
 }
+
+
 function cloneState(){
+
   return structuredClone(SHIP);
+
 }
+
+
 function restoreState(snapshot){
+
   SHIP = structuredClone(snapshot);
-  render();
+
+  renderAll();
+
 }
+
+
 function fmt(h){
+
   let hh = Math.floor(h);
+
   let mm = Math.round((h-hh)*60);
+
   if(mm === 60){
+
     hh++;
-    mm = 0;
+
+    mm=0;
+
   }
+
   const ap = hh >= 12 ? "pm" : "am";
+
   let H = hh % 12;
-  if(H === 0) H = 12;
-  return H + (mm ? ":" + String(mm).padStart(2,"0") : "") + ap;
+
+  if(H === 0) H=12;
+
+  return H + (
+    mm
+      ? ":" + String(mm).padStart(2,"0")
+      : ""
+  ) + ap;
+
 }
-function hrLabel(h){
-  return fmt(h);
-}
+
+
 function toast(message,type="success"){
+
   const el = document.createElement("div");
+
   el.className = `toast ${type}`;
+
   el.textContent = message;
+
   $("toastContainer").appendChild(el);
-  setTimeout(() => el.remove(),3200);
+
+  setTimeout(
+    ()=>el.remove(),
+    3200
+  );
+
 }
+
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+
+function navigate(view){
+
+  if(!ROUTES[view]) return;
+
+  currentView = view;
+
+  window.location.hash = view;
+
+  document
+    .querySelectorAll(".tab[data-view]")
+    .forEach(tab => {
+
+      tab.classList.toggle(
+        "active",
+        tab.dataset.view === view
+      );
+
+    });
+
+  document
+    .querySelectorAll(".view")
+    .forEach(el => {
+
+      el.classList.toggle(
+        "hidden",
+        el.id !== `view-${view}`
+      );
+
+    });
+
+  $("pageTitle").textContent =
+    ROUTES[view].title;
+
+  if(view === "dashboard"){
+    renderDashboard();
+  }
+
+  if(view === "shipments"){
+    renderShipmentsTable();
+  }
+
+  if(view === "queue"){
+    renderWorkQueue();
+  }
+
+  if(view === "appointments"){
+    renderAppointments();
+  }
+
+  if(view === "history"){
+    renderHistory();
+  }
+
+  updateURL();
+
+}
+
+
+function updateURL(){
+
+  if(
+    window.location.hash !== `#${currentView}`
+  ){
+    history.replaceState(
+      null,
+      "",
+      `#${currentView}`
+    );
+  }
+
+}
+
+
+function initializeNavigation(){
+
+  document
+    .querySelectorAll(".tab[data-view]")
+    .forEach(tab => {
+
+      tab.addEventListener(
+        "click",
+        () => navigate(tab.dataset.view)
+      );
+
+    });
+
+  const hash =
+    window.location.hash
+      .replace("#","")
+      .trim();
+
+  if(ROUTES[hash]){
+
+    currentView = hash;
+
+  }
+
+  navigate(currentView);
+
+}
+
+
+window.addEventListener(
+  "hashchange",
+  () => {
+
+    const view =
+      window.location.hash
+        .replace("#","")
+        .trim();
+
+    if(ROUTES[view]){
+      navigate(view);
+    }
+
+  }
+);
+
+
 /* ============================================================
    CLOCK
 ============================================================ */
+
 function updateClock(){
-  const now = new Date();
+
   $("clock").textContent =
-    now.toLocaleTimeString([],{
-      hour:"numeric",
-      minute:"2-digit"
-    });
+    new Date().toLocaleTimeString(
+      [],
+      {
+        hour:"numeric",
+        minute:"2-digit"
+      }
+    );
+
 }
-setInterval(updateClock,1000);
+
+setInterval(
+  updateClock,
+  1000
+);
+
 updateClock();
+
+
 /* ============================================================
-   HEADER
+   GANTT HEADER
 ============================================================ */
+
 function buildHeader(){
-  hoursEl.innerHTML = "";
-  for(let h=CONFIG.START_HR; h<CONFIG.END_HR; h++){
-    const d = document.createElement("div");
-    d.className = "hr";
-    d.style.width = CONFIG.COL_W + "px";
-    d.textContent = hrLabel(h);
+
+  hoursEl.innerHTML="";
+
+  for(
+    let h=CONFIG.START_HR;
+    h<CONFIG.END_HR;
+    h++
+  ){
+
+    const d =
+      document.createElement("div");
+
+    d.className="hr";
+
+    d.style.width =
+      CONFIG.COL_W+"px";
+
+    d.textContent =
+      fmt(h);
+
     hoursEl.appendChild(d);
+
   }
+
 }
+
+
 /* ============================================================
    CONFLICT ENGINE
 ============================================================ */
+
 function findRowConflicts(list){
+
   const set = new Set();
-  const active = list.filter(s => s.type !== "done");
-  for(let i=0;i<active.length;i++){
-    for(let j=i+1;j<active.length;j++){
+
+  const active =
+    list.filter(
+      s => s.type !== "done"
+    );
+
+  for(
+    let i=0;
+    i<active.length;
+    i++
+  ){
+
+    for(
+      let j=i+1;
+      j<active.length;
+      j++
+    ){
+
       if(
         active[i].start < active[j].end &&
         active[j].start < active[i].end
       ){
-        set.add(active[i].id);
-        set.add(active[j].id);
+
+        set.add(
+          active[i].id
+        );
+
+        set.add(
+          active[j].id
+        );
+
       }
+
     }
+
   }
+
   return set;
+
 }
+
+
+/*
+ * FIX:
+ * The old implementation counted shipments involved
+ * in conflicts. This version counts actual overlapping
+ * appointment pairs.
+ */
+
 function totalConflicts(){
-  let total = 0;
+
+  let total=0;
+
   CONFIG.DOORS.forEach(door => {
-    const list = SHIP.filter(s => s.door === door);
-    total += findRowConflicts(list).size;
+
+    const list =
+      SHIP.filter(
+        s =>
+          s.door === door &&
+          s.type !== "done"
+      );
+
+    for(
+      let i=0;
+      i<list.length;
+      i++
+    ){
+
+      for(
+        let j=i+1;
+        j<list.length;
+        j++
+      ){
+
+        if(
+          list[i].start < list[j].end &&
+          list[j].start < list[i].end
+        ){
+
+          total++;
+
+        }
+
+      }
+
+    }
+
   });
+
   return total;
+
 }
+
+
 /* ============================================================
    DOOR UTILIZATION
 ============================================================ */
+
 function doorActiveDuration(door){
-  const active = SHIP.filter(
-    s => s.door === door && s.type !== "done"
-  );
+
+  const active =
+    SHIP.filter(
+      s =>
+        s.door === door &&
+        s.type !== "done"
+    );
+
   if(!active.length) return null;
-  const hrs = active.reduce(
-    (sum,s) => sum + (s.end-s.start),
-    0
-  );
-  const h = Math.floor(hrs);
-  const m = Math.round((hrs-h)*60);
-  const late = active.some(
-    s => s.tags.some(t => t.t === "Late")
-  );
+
+  const hrs =
+    active.reduce(
+      (sum,s)=>
+        sum+(s.end-s.start),
+      0
+    );
+
+  const h =
+    Math.floor(hrs);
+
+  const m =
+    Math.round(
+      (hrs-h)*60
+    );
+
+  const late =
+    active.some(
+      s =>
+        s.tags.some(
+          t => t.t === "Late"
+        )
+    );
+
   return {
     text:`${h}h ${String(m).padStart(2,"0")}m`,
     warn:late
   };
+
 }
+
+
 /* ============================================================
    PLAN SCORE
 ============================================================ */
+
 function calculatePlanScore(){
-  const conflicts = totalConflicts();
-  const late = SHIP.filter(
-    s => s.type !== "done" &&
-         s.tags.some(t => t.t === "Late")
-  ).length;
-  const activeHours = SHIP
-    .filter(s => s.type !== "done")
-    .reduce((sum,s)=>sum+(s.end-s.start),0);
-  const utilization = Math.min(
-    100,
-    Math.round(
-      activeHours /
-      ((CONFIG.END_HR-CONFIG.START_HR)*CONFIG.DOORS.length)
-      *100
+
+  const conflicts =
+    totalConflicts();
+
+  const late =
+    SHIP.filter(
+      s =>
+        s.type !== "done" &&
+        s.tags.some(
+          t=>t.t==="Late"
+        )
+    ).length;
+
+  const activeHours =
+    SHIP
+      .filter(
+        s=>s.type!=="done"
+      )
+      .reduce(
+        (sum,s)=>
+          sum+(s.end-s.start),
+        0
+      );
+
+  const utilization =
+    Math.min(
+      100,
+      Math.round(
+        activeHours /
+        (
+          (CONFIG.END_HR-CONFIG.START_HR) *
+          CONFIG.DOORS.length
+        ) *
+        100
+      )
+    );
+
+  let score=100;
+
+  score -= conflicts*12;
+
+  score -= late*2;
+
+  if(utilization<20){
+    score-=8;
+  }
+
+  if(utilization>90){
+    score-=5;
+  }
+
+  return Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(score)
     )
   );
-  let score = 100;
-  score -= conflicts * 12;
-  score -= late * 2;
-  if(utilization < 20) score -= 8;
-  if(utilization > 90) score -= 5;
-  return Math.max(0,Math.min(100,Math.round(score)));
+
 }
+
+
 /* ============================================================
    METRICS
 ============================================================ */
+
 function updateMetrics(){
-  const busy = CONFIG.DOORS.filter(
-    d => SHIP.some(
-      s => s.door === d && s.type !== "done"
-    )
-  ).length;
-  const util = Math.round(
-    busy / CONFIG.DOORS.length * 100
-  );
-  const late = SHIP.filter(
-    s =>
-      s.type !== "done" &&
-      s.tags.some(t => t.t === "Late")
-  ).length;
-  const conf = totalConflicts();
-  const score = calculatePlanScore();
-  $("m-util").textContent = util + "%";
-  $("m-late").textContent = late;
-  $("m-conf").textContent = conf;
-  $("m-score").textContent = score;
+
+  const busy =
+    CONFIG.DOORS.filter(
+      d =>
+        SHIP.some(
+          s =>
+            s.door===d &&
+            s.type!=="done"
+        )
+    ).length;
+
+  const util =
+    Math.round(
+      busy /
+      CONFIG.DOORS.length *
+      100
+    );
+
+  const late =
+    SHIP.filter(
+      s =>
+        s.type!=="done" &&
+        s.tags.some(
+          t=>t.t==="Late"
+        )
+    ).length;
+
+  const conf =
+    totalConflicts();
+
+  const score =
+    calculatePlanScore();
+
+  $("m-util").textContent =
+    util+"%";
+
+  $("m-late").textContent =
+    late;
+
+  $("m-conf").textContent =
+    conf;
+
+  $("m-score").textContent =
+    score;
+
   $("m-util").className =
-    "v " + (util > 85 ? "warn" : util < 30 ? "bad" : "good");
+    "v " +
+    (
+      util>85
+        ? "warn"
+        : util<30
+          ? "bad"
+          : "good"
+    );
+
   $("m-late").className =
-    "v " + (late > 3 ? "bad" : late === 0 ? "good" : "warn");
+    "v " +
+    (
+      late>3
+        ? "bad"
+        : late===0
+          ? "good"
+          : "warn"
+    );
+
   $("m-conf").className =
-    "v " + (conf > 0 ? "bad" : "good");
+    "v " +
+    (
+      conf>0
+        ? "bad"
+        : "good"
+    );
+
   $("m-score").className =
-    "v " + (score >= 85 ? "good" : score < 60 ? "bad" : "warn");
+    "v " +
+    (
+      score>=85
+        ? "good"
+        : score<60
+          ? "bad"
+          : "warn"
+    );
+
 }
+
+
 /* ============================================================
    FILTERING
 ============================================================ */
+
 function shipmentVisible(s){
+
   if(filters.search){
-    const q = filters.search.toLowerCase();
+
+    const q =
+      filters.search.toLowerCase();
+
     const matches =
       s.id.toLowerCase().includes(q) ||
       s.code.toLowerCase().includes(q) ||
       s.door.toLowerCase().includes(q);
-    if(!matches) return false;
+
+    if(!matches){
+      return false;
+    }
+
   }
+
   if(filters.type !== "all"){
-    if(filters.type === "in" && !isRecv(s.door)){
+
+    if(
+      filters.type==="in" &&
+      !isRecv(s.door)
+    ){
       return false;
     }
-    if(filters.type === "out" && isRecv(s.door)){
+
+    if(
+      filters.type==="out" &&
+      isRecv(s.door)
+    ){
       return false;
     }
+
   }
+
   if(filters.status !== "all"){
+
     const conflicts =
       findRowConflicts(
-        SHIP.filter(x => x.door === s.door)
+        SHIP.filter(
+          x=>x.door===s.door
+        )
       ).has(s.id);
-    if(filters.status === "active" && s.type === "done"){
+
+    if(
+      filters.status==="active" &&
+      s.type==="done"
+    ){
       return false;
     }
-    if(filters.status === "done" && s.type !== "done"){
+
+    if(
+      filters.status==="done" &&
+      s.type!=="done"
+    ){
       return false;
     }
-    if(filters.status === "conflict" && !conflicts){
+
+    if(
+      filters.status==="conflict" &&
+      !conflicts
+    ){
       return false;
     }
+
   }
+
   return true;
+
 }
+
+
 /* ============================================================
-   RENDER
+   GANTT ROWS
 ============================================================ */
+
 function buildRows(flashIds=[]){
-  rowsEl.innerHTML = "";
+
+  rowsEl.innerHTML="";
+
   CONFIG.DOORS.forEach(door => {
-    const row = document.createElement("div");
-    row.className = "row";
-    const shipments = SHIP
-      .filter(s => s.door === door && shipmentVisible(s))
-      .sort((a,b)=>a.start-b.start);
+
+    const row =
+      document.createElement("div");
+
+    row.className="row";
+
+    const shipments =
+      SHIP
+        .filter(
+          s =>
+            s.door===door &&
+            shipmentVisible(s)
+        )
+        .sort(
+          (a,b)=>a.start-b.start
+        );
+
     const conflicts =
       findRowConflicts(
-        SHIP.filter(s=>s.door===door)
+        SHIP.filter(
+          s=>s.door===door
+        )
       );
-    const label = document.createElement("div");
-    label.className = "dlabel";
-    const dur = doorActiveDuration(door);
+
+    const label =
+      document.createElement("div");
+
+    label.className="dlabel";
+
+    const dur =
+      doorActiveDuration(door);
+
     label.innerHTML =
       `<div class="id">◀ ${door}</div>` +
       (
         dur
-          ? `<div class="sub ${dur.warn?"warn":""}">
-               ${dur.text}
-             </div>`
-          : `<div class="sub">Open</div>`
+          ?
+          `<div class="sub ${dur.warn?"warn":""}">
+             ${dur.text}
+           </div>`
+          :
+          `<div class="sub">Open</div>`
       );
+
     row.appendChild(label);
-    const track = document.createElement("div");
-    track.className = "track";
+
+
+    const track =
+      document.createElement("div");
+
+    track.className="track";
+
+
     for(
       let i=1;
       i<CONFIG.END_HR-CONFIG.START_HR;
       i++
     ){
-      const line = document.createElement("div");
-      line.className = "colline";
+
+      const line =
+        document.createElement("div");
+
+      line.className="colline";
+
       line.style.left =
-        (i*CONFIG.COL_W) + "px";
+        i*CONFIG.COL_W+"px";
+
       track.appendChild(line);
+
     }
+
+
     shipments.forEach(s => {
+
       const left =
-        (s.start-CONFIG.START_HR) *
+        (
+          s.start-CONFIG.START_HR
+        ) *
         CONFIG.COL_W;
+
       const width =
         Math.max(
-          (s.end-s.start) *
-          CONFIG.COL_W - 2,
+          (
+            s.end-s.start
+          ) *
+          CONFIG.COL_W-2,
           18
         );
+
       const bar =
         document.createElement("button");
-      let cls = s.type;
+
+      let cls=s.type;
+
       if(
         s.tags.some(
-          t => t.t === "Suspended"
+          t=>t.t==="Suspended"
         )
       ){
-        cls = "orange";
+        cls="orange";
       }
+
       if(conflicts.has(s.id)){
-        cls += " conflict";
+        cls+=" conflict";
       }
+
       if(flashIds.includes(s.id)){
-        cls += " flash";
+        cls+=" flash";
       }
-      if(selectedShipment === s.id){
-        cls += " selected";
+
+      if(selectedShipment===s.id){
+        cls+=" selected";
       }
-      bar.className = "bar " + cls;
-      bar.style.left = left + "px";
-      bar.style.width = width + "px";
-      bar.type = "button";
+
+      bar.className =
+        "bar "+cls;
+
+      bar.style.left =
+        left+"px";
+
+      bar.style.width =
+        width+"px";
+
+      bar.type="button";
+
       bar.title =
         `${s.code} · ${s.door} · ${fmt(s.start)}–${fmt(s.end)}`;
+
       bar.innerHTML =
         `<span>${s.code}</span>` +
         (
-          s.type === "done"
+          s.type==="done"
             ? `<span class="chk">✓</span>`
             : ""
         );
+
       bar.addEventListener(
         "click",
-        () => openShipment(s.id)
+        ()=>openShipment(s.id)
       );
+
       track.appendChild(bar);
+
+
       if(s.tags.length){
+
         const tg =
           document.createElement("div");
-        tg.className = "tags";
-        tg.style.left = left + "px";
+
+        tg.className="tags";
+
+        tg.style.left =
+          left+"px";
+
         s.tags.forEach(tag => {
+
           const el =
             document.createElement("span");
+
           el.className =
             `tag ${tag.c}`;
+
           el.textContent =
             tag.t;
+
           tg.appendChild(el);
+
         });
+
         track.appendChild(tg);
+
       }
+
     });
+
+
     row.appendChild(track);
+
     rowsEl.appendChild(row);
+
   });
+
 }
+
+
+/* ============================================================
+   RENDER
+============================================================ */
+
 function render(flashIds=[]){
+
   buildRows(flashIds);
+
   updateMetrics();
+
 }
+
+
+function renderAll(){
+
+  render();
+
+  renderDashboard();
+
+  renderShipmentsTable();
+
+  renderWorkQueue();
+
+  renderAppointments();
+
+  renderHistory();
+
+}
+
+
 /* ============================================================
    SHIPMENT DRAWER
 ============================================================ */
+
 function openShipment(id){
-  const s = SHIP.find(x => x.id === id);
+
+  const s =
+    SHIP.find(
+      x=>x.id===id
+    );
+
   if(!s) return;
-  selectedShipment = id;
+
+  selectedShipment=id;
+
   const conflicts =
     findRowConflicts(
-      SHIP.filter(x => x.door === s.door)
+      SHIP.filter(
+        x=>x.door===s.door
+      )
     ).has(s.id);
+
   drawerTitle.textContent =
     `${s.code} · ${s.door}`;
+
   drawerBody.innerHTML = `
+
     <div class="detail-row">
-      <span class="detail-key">Shipment</span>
-      <span class="detail-value">${s.code}</span>
+      <span class="detail-key">
+        Shipment
+      </span>
+
+      <span class="detail-value">
+        ${s.code}
+      </span>
     </div>
+
+
     <div class="detail-row">
-      <span class="detail-key">Door</span>
-      <span class="detail-value">${s.door}</span>
+      <span class="detail-key">
+        Door
+      </span>
+
+      <span class="detail-value">
+        ${s.door}
+      </span>
     </div>
+
+
     <div class="detail-row">
-      <span class="detail-key">Window</span>
-      <span class="detail-value">${fmt(s.start)} – ${fmt(s.end)}</span>
+      <span class="detail-key">
+        Window
+      </span>
+
+      <span class="detail-value">
+        ${fmt(s.start)} – ${fmt(s.end)}
+      </span>
     </div>
+
+
     <div class="detail-row">
-      <span class="detail-key">Workflow</span>
+      <span class="detail-key">
+        Workflow
+      </span>
+
       <span class="detail-value">
         ${isRecv(s.door) ? "Receiving" : "Shipping"}
       </span>
     </div>
+
+
     <div class="detail-row">
-      <span class="detail-key">Status</span>
+      <span class="detail-key">
+        Status
+      </span>
+
       <span class="detail-value">
+
         <span class="status-pill ${
           conflicts
             ? "status-conflict"
-            : s.type === "done"
+            : s.type==="done"
               ? "status-done"
               : "status-active"
         }">
+
           ${
             conflicts
               ? "Conflict"
-              : s.type === "done"
+              : s.type==="done"
                 ? "Completed"
                 : "Active"
           }
+
         </span>
+
       </span>
     </div>
+
+
     <div class="detail-row">
-      <span class="detail-key">Tags</span>
+      <span class="detail-key">
+        Tags
+      </span>
+
       <span class="detail-value">
         ${
           s.tags.length
@@ -1664,247 +4178,530 @@ function openShipment(id){
         }
       </span>
     </div>
+
+
     <div style="margin-top:18px">
+
       <button
         class="btn btn-primary"
-        onclick="quickShipmentCommand('${s.id}')"
+        id="askShipmentBtn"
       >
         Ask AI about ${s.id}
       </button>
+
     </div>
+
   `;
+
+  $("askShipmentBtn").onclick =
+    ()=>quickShipmentCommand(s.id);
+
   drawer.classList.add("open");
+
   render();
+
 }
+
+
 function closeDrawer(){
+
   drawer.classList.remove("open");
-  selectedShipment = null;
+
+  selectedShipment=null;
+
   render();
+
 }
-$("drawerClose").onclick = closeDrawer;
+
+$("drawerClose").onclick =
+  closeDrawer;
+
+
 /* ============================================================
    AI CHAT
 ============================================================ */
+
 function addUser(text){
+
   const d =
     document.createElement("div");
-  d.className = "msg user";
-  d.textContent = text;
+
+  d.className="msg user";
+
+  d.textContent=text;
+
   chat.appendChild(d);
-  chat.scrollTop = chat.scrollHeight;
+
+  chat.scrollTop =
+    chat.scrollHeight;
+
 }
+
+
 function addBot(html){
+
   const d =
     document.createElement("div");
-  d.className = "msg bot";
-  d.innerHTML = html;
+
+  d.className="msg bot";
+
+  d.innerHTML=html;
+
   chat.appendChild(d);
-  chat.scrollTop = chat.scrollHeight;
+
+  chat.scrollTop =
+    chat.scrollHeight;
+
 }
+
+
 function typing(){
+
   const d =
     document.createElement("div");
-  d.className = "typing";
-  d.id = "typing";
+
+  d.className="typing";
+
+  d.id="typing";
+
   d.innerHTML =
     "<span></span><span></span><span></span>";
+
   chat.appendChild(d);
-  chat.scrollTop = chat.scrollHeight;
+
+  chat.scrollTop =
+    chat.scrollHeight;
+
   return d;
+
 }
+
+
 function stopTyping(){
-  const t = $("typing");
-  if(t) t.remove();
+
+  const t=$("typing");
+
+  if(t){
+    t.remove();
+  }
+
 }
+
+
 /* ============================================================
    ENTITY EXTRACTION
 ============================================================ */
+
 function findShipment(text){
-  const t = text.toLowerCase();
-  let best = null;
+
+  const t =
+    text.toLowerCase();
+
+  let best=null;
+
   SHIP.forEach(s => {
+
     const code =
       s.code.toLowerCase();
+
     const re =
-      new RegExp("\\b"+code+"\\b");
+      new RegExp(
+        "\\b"+code+"\\b"
+      );
+
     if(re.test(t)){
+
       const score =
         code.length +
-        (s.type !== "done" ? 3 : 0);
-      if(!best || score > best.score){
-        best = {
+        (
+          s.type!=="done"
+            ? 3
+            : 0
+        );
+
+      if(
+        !best ||
+        score>best.score
+      ){
+
+        best={
           shipment:s,
           score
         };
+
       }
+
     }
+
   });
-  if(best) return best.shipment;
+
+  if(best){
+    return best.shipment;
+  }
+
   const number =
-    t.match(/\b(\d{1,3})\b/);
+    t.match(
+      /\b(\d{1,3})\b/
+    );
+
   if(number){
+
     const hits =
       SHIP.filter(
-        s => s.code.toLowerCase() ===
-             "s"+number[1]
+        s =>
+          s.code.toLowerCase()===
+          "s"+number[1]
       );
+
     if(hits.length){
+
       return hits.find(
-        s => s.type !== "done"
+        s=>s.type!=="done"
       ) || hits[0];
+
     }
+
   }
+
   return null;
+
 }
+
+
 function resolveDoor(num){
-  const n = parseInt(num,10);
+
+  const n =
+    parseInt(num,10);
+
   if(
     !Number.isNaN(n) &&
-    n >= 1 &&
-    n <= CONFIG.DOORS.length
+    n>=1 &&
+    n<=CONFIG.DOORS.length
   ){
+
     return CONFIG.DOORS[n-1];
+
   }
+
   return null;
+
 }
+
+
 function findDoor(text){
+
   const toMatch =
     text.match(
       /\bto\s+(?:door|dock)\s*#?\s*(\d{1,2})\b/i
     );
+
   if(toMatch){
-    return resolveDoor(toMatch[1]);
+    return resolveDoor(
+      toMatch[1]
+    );
   }
+
   const match =
     text.match(
       /(?:door|dock)\s*#?\s*(\d{1,2})\b/i
     );
+
   if(match){
-    return resolveDoor(match[1]);
+    return resolveDoor(
+      match[1]
+    );
   }
+
   return null;
+
 }
+
+
 function findTimes(text){
-  const output = [];
+
+  const output=[];
+
   const re =
     /(\d{1,2})(?::(\d{2}))?\s*(am|pm|a\.m\.|p\.m\.)/gi;
+
   let m;
-  while((m=re.exec(text)) !== null){
+
+  while(
+    (m=re.exec(text))!==null
+  ){
+
     let h =
       parseInt(m[1],10);
+
     const min =
       m[2]
         ? parseInt(m[2],10)
         : 0;
+
     const ap =
       m[3]
         .replace(/\./g,"")
         .toLowerCase();
-    if(ap === "pm" && h < 12){
-      h += 12;
+
+    if(
+      ap==="pm" &&
+      h<12
+    ){
+      h+=12;
     }
-    if(ap === "am" && h === 12){
-      h = 0;
+
+    if(
+      ap==="am" &&
+      h===12
+    ){
+      h=0;
     }
+
     output.push(
-      h + min/60
+      h+min/60
     );
+
   }
+
   return output;
+
 }
+
+
 function findShift(text){
+
   const m =
-    text.toLowerCase().match(
-      /(\d+(?:\.\d+)?)\s*(hour|hr|h)s?\s*(late|later|delay|behind|earlier|early|ahead|sooner)?/
-    );
-  if(!m) return null;
+    text
+      .toLowerCase()
+      .match(
+        /(\d+(?:\.\d+)?)\s*(hour|hr|h)s?\s*(late|later|delay|behind|earlier|early|ahead|sooner)/
+      );
+
+  if(!m){
+    return null;
+  }
+
   let value =
     parseFloat(m[1]);
+
   const direction =
     m[3] || "";
+
   if(
-    /earl|ahead|sooner/.test(direction)
+    /earl|ahead|sooner/
+      .test(direction)
   ){
-    value = -value;
+    value=-value;
   }
+
   return value;
+
 }
+
+
 /* ============================================================
-   FREE DOOR ENGINE
+   FREE DOORS
 ============================================================ */
+
 function freeDoorsBetween(start,end){
-  return CONFIG.DOORS.filter(door => {
-    return !SHIP.some(
-      s =>
-        s.door === door &&
-        s.type !== "done" &&
-        s.start < end &&
-        start < s.end
-    );
-  });
+
+  return CONFIG.DOORS.filter(
+    door => {
+
+      return !SHIP.some(
+        s =>
+          s.door===door &&
+          s.type!=="done" &&
+          s.start<end &&
+          start<s.end
+      );
+
+    }
+  );
+
 }
+
+
 /* ============================================================
-   COMPATIBLE DOORS
+   COMPATIBLE DOOR
 ============================================================ */
+
 function findFreeDoor(ship,exclude){
+
   const receiving =
     isRecv(ship.door);
+
   const candidates =
     CONFIG.DOORS.filter(
       d =>
-        d !== exclude &&
-        isRecv(d) === receiving
+        d!==exclude &&
+        isRecv(d)===receiving
     );
-  for(const door of candidates){
+
+  for(
+    const door of candidates
+  ){
+
     const busy =
       SHIP.some(
         s =>
-          s.door === door &&
-          s.type !== "done" &&
-          s.start < ship.end &&
-          ship.start < s.end
+          s.door===door &&
+          s.type!=="done" &&
+          s.start<ship.end &&
+          ship.start<s.end
       );
+
     if(!busy){
       return door;
     }
+
   }
+
   return null;
+
 }
+
+
 /* ============================================================
-   OPTIMIZATION ENGINE
+   OPTIMIZATION
 ============================================================ */
+
 function calculateOptimization(){
+
   const before =
     cloneState();
-  const actions = [];
-  let working =
-    SHIP
-      .filter(s => s.type !== "done")
-      .sort((a,b)=>a.start-b.start);
-  /*
-   * Pass 1:
-   * relocate conflicts to compatible doors.
-   */
-  for(const ship of [...working]){
-    const conflicts =
-      findRowConflicts(
-        SHIP.filter(
-          s => s.door === ship.door
-        )
+
+  const working =
+    cloneState()
+      .filter(
+        s=>s.type!=="done"
+      )
+      .sort(
+        (a,b)=>a.start-b.start
       );
-    if(!conflicts.has(ship.id)){
-      continue;
+
+  let simulated =
+    cloneState();
+
+  const actions=[];
+
+
+  /*
+   * Work against the simulated copy instead
+   * of mutating global SHIP during analysis.
+   */
+
+  function conflictsForDoor(door){
+
+    const list =
+      simulated.filter(
+        s =>
+          s.door===door &&
+          s.type!=="done"
+      );
+
+    const ids =
+      new Set();
+
+    for(
+      let i=0;
+      i<list.length;
+      i++
+    ){
+
+      for(
+        let j=i+1;
+        j<list.length;
+        j++
+      ){
+
+        if(
+          list[i].start<list[j].end &&
+          list[j].start<list[i].end
+        ){
+
+          ids.add(list[i].id);
+          ids.add(list[j].id);
+
+        }
+
+      }
+
     }
-    const alternative =
-      findFreeDoor(
-        ship,
+
+    return ids;
+
+  }
+
+
+  for(
+    const source of working
+  ){
+
+    const ship =
+      simulated.find(
+        s=>s.id===source.id
+      );
+
+    if(!ship) continue;
+
+    const conflicts =
+      conflictsForDoor(
         ship.door
       );
+
+    if(
+      !conflicts.has(
+        ship.id
+      )
+    ){
+      continue;
+    }
+
+    const receiving =
+      isRecv(ship.door);
+
+    const candidates =
+      CONFIG.DOORS.filter(
+        d =>
+          d!==ship.door &&
+          isRecv(d)===receiving
+      );
+
+    let alternative=null;
+
+    for(
+      const door of candidates
+    ){
+
+      const busy =
+        simulated.some(
+          s =>
+            s.id!==ship.id &&
+            s.door===door &&
+            s.type!=="done" &&
+            s.start<ship.end &&
+            ship.start<s.end
+        );
+
+      if(!busy){
+
+        alternative=door;
+
+        break;
+
+      }
+
+    }
+
     if(alternative){
+
       const from =
         ship.door;
+
       ship.door =
         alternative;
+
       actions.push({
         shipment:ship.id,
         text:
@@ -1912,39 +4709,60 @@ function calculateOptimization(){
         reason:
           `${alternative} is compatible and open during the appointment window.`
       });
+
     }
+
   }
+
+
   /*
-   * Pass 2:
-   * push remaining overlaps forward.
+   * Pass 2: resolve remaining overlaps by moving
+   * the later shipment forward.
    */
+
   CONFIG.DOORS.forEach(door => {
+
     const list =
-      SHIP
+      simulated
         .filter(
           s =>
-            s.door === door &&
-            s.type !== "done"
+            s.door===door &&
+            s.type!=="done"
         )
         .sort(
           (a,b)=>a.start-b.start
         );
-    for(let i=1;i<list.length;i++){
+
+    for(
+      let i=1;
+      i<list.length;
+      i++
+    ){
+
       const previous =
         list[i-1];
+
       const current =
         list[i];
+
       if(
-        current.start <
+        current.start<
         previous.end
       ){
+
         const duration =
           current.end-current.start;
+
         const newStart =
           previous.end;
+
         const newEnd =
-          newStart + duration;
-        if(newEnd <= CONFIG.END_HR){
+          newStart+duration;
+
+        if(
+          newEnd<=CONFIG.END_HR
+        ){
+
           actions.push({
             shipment:current.id,
             text:
@@ -1952,164 +4770,339 @@ function calculateOptimization(){
             reason:
               `Clears overlap with ${previous.id}.`
           });
+
           current.start =
             newStart;
+
           current.end =
             newEnd;
+
         }
+
       }
+
     }
+
   });
+
+
+  /*
+   * Calculate proposed metrics without changing
+   * the actual warehouse state.
+   */
+
+  const proposed =
+    structuredClone(
+      simulated
+    );
+
+  const original =
+    SHIP;
+
+  SHIP =
+    structuredClone(
+      proposed
+    );
+
   const after =
     totalConflicts();
+
   const score =
     calculatePlanScore();
+
+  SHIP =
+    original;
+
   return {
+
     before,
+
     actions,
+
     after,
+
     score,
-    proposed:cloneState()
+
+    proposed
+
   };
+
 }
+
+
 /* ============================================================
    PLAN PREVIEW
 ============================================================ */
+
 function showPlanPreview(plan){
-  pendingPlan = plan;
+
+  pendingPlan=plan;
+
   if(!plan.actions.length){
+
     return `
+
       <div class="plan-card">
+
         <div class="plan-head">
-          <span>Plan Analysis</span>
+
+          <span>
+            Plan Analysis
+          </span>
+
           <span class="plan-score">
             Score ${plan.score}/100
           </span>
+
         </div>
+
         <div class="plan-change">
-          <b>No changes required.</b><br>
-          The current schedule has no resolvable conflicts.
+
+          <b>
+            No changes required.
+          </b>
+
+          <br>
+
+          The current schedule has no
+          resolvable conflicts.
+
         </div>
+
       </div>
+
     `;
+
   }
+
+
   return `
+
     <div class="plan-card">
+
       <div class="plan-head">
-        <span>Proposed Plan</span>
+
+        <span>
+          Proposed Plan
+        </span>
+
         <span class="plan-score">
           Score ${plan.score}/100
         </span>
+
       </div>
+
+
       ${plan.actions.map(
         action => `
+
           <div class="plan-change">
-            <b>${action.text}</b><br>
+
+            <b>
+              ${action.text}
+            </b>
+
+            <br>
+
             <span style="color:#6b7785">
               ${action.reason}
             </span>
+
           </div>
+
         `
       ).join("")}
+
+
       <div class="plan-actions">
+
         <button
           class="btn btn-primary"
           onclick="approvePlan()"
         >
           ✓ Approve Plan
         </button>
+
         <button
           class="btn btn-secondary"
           onclick="rejectPlan()"
         >
           Reject
         </button>
+
       </div>
+
     </div>
+
   `;
+
 }
+
+
 /* ============================================================
-   APPROVAL
+   APPROVE PLAN
 ============================================================ */
+
 function approvePlan(){
-  if(!pendingPlan) return;
-  historyStack.push(cloneState());
+
+  if(!pendingPlan){
+    return;
+  }
+
+  historyStack.push(
+    cloneState()
+  );
+
   SHIP =
     structuredClone(
       pendingPlan.proposed
     );
+
   const actions =
     pendingPlan.actions;
+
   const after =
     totalConflicts();
-  pendingPlan = null;
+
+  pendingPlan=null;
+
+  auditEvents.unshift({
+    time:"Just now",
+    event:"Schedule optimization approved",
+    object:actions.map(a=>a.shipment).join(", "),
+    operator:"Demo Operator",
+    result:"Success"
+  });
+
+  renderAll();
+
   render(
-    SHIP.map(s=>s.id)
+    SHIP.map(
+      s=>s.id
+    )
   );
+
   addBot(`
-    <b>Plan approved.</b>
+
+    <b>
+      Plan approved.
+    </b>
+
     <ul>
+
       ${actions.map(
-        a => `<li>${a.text}</li>`
+        a=>`<li>${a.text}</li>`
       ).join("")}
+
     </ul>
+
     <span class="ok">
       ✓ Schedule updated
     </span>
+
     <br>
+
     Remaining conflicts:
     <b>${after}</b>
+
   `);
+
   toast(
     "Optimization plan approved",
     "success"
   );
+
 }
+
+
+/* ============================================================
+   REJECT PLAN
+============================================================ */
+
 function rejectPlan(){
-  pendingPlan = null;
+
+  pendingPlan=null;
+
   addBot(
-    `<span class="wn">Plan rejected.</span> The current schedule remains unchanged.`
+    `<span class="wn">
+      Plan rejected.
+    </span>
+    The current schedule remains unchanged.`
   );
+
   toast(
     "Plan rejected",
     "warning"
   );
+
 }
+
+
 /* ============================================================
-   COMMAND PROCESSOR
+   AI COMMAND PROCESSOR
 ============================================================ */
+
 function respond(text){
+
   const t =
     text.toLowerCase().trim();
+
+
   /* RESET */
+
   if(
-    /\b(reset|undo|restore|original|start over)\b/
+    /\b(reset|restore|original|start over)\b/
       .test(t)
   ){
+
     historyStack.push(
       cloneState()
     );
+
     SHIP =
       structuredClone(
         ORIGINAL
       );
-    render();
+
+    auditEvents.unshift({
+      time:"Just now",
+      event:"Schedule reset",
+      object:"WMD1",
+      operator:"Demo Operator",
+      result:"Success"
+    });
+
+    renderAll();
+
     return `
+
       <span class="ok">
         ↺ Plan restored.
       </span>
-      All shipments are back to the original schedule.
+
+      All shipments are back to
+      the original schedule.
+
     `;
+
   }
+
+
   /* HELP */
+
   if(
     /\b(help|what can you|capab|commands)\b/
       .test(t)
   ){
+
     return `
+
       I'm your <b>Yard Planner AI</b>.
-      I can analyze the live demo schedule and propose
-      operational changes.
+
+      I can analyze the demo warehouse
+      schedule and propose operational
+      changes.
+
       <ul>
         <li>Move shipments between compatible doors</li>
         <li>Change appointment times</li>
@@ -2119,461 +5112,1761 @@ function respond(text){
         <li>Preview a plan before approving it</li>
         <li>Reset the schedule</li>
       </ul>
+
       Try:
+
       <br><br>
-      <i>"S8 is 2 hours late — re-plan."</i>
+
+      <i>
+        "S8 is 2 hours late — re-plan."
+      </i>
+
     `;
+
   }
+
+
   /* FREE DOORS */
+
   if(
     /\b(free|open|available|empty)\b/.test(t) &&
     /\bdoor|dock\b/.test(t)
   ){
+
     const times =
       findTimes(t);
+
     let a =
       times[0] ?? 14;
+
     let b =
       times[1] ?? a+2;
+
     if(b<a){
+
       const temp=a;
+
       a=b;
+
       b=temp;
+
     }
+
     const free =
-      freeDoorsBetween(a,b);
+      freeDoorsBetween(
+        a,
+        b
+      );
+
     if(!free.length){
+
       return `
+
         <span class="wn">
           No doors are completely open
           between ${fmt(a)} and ${fmt(b)}.
         </span>
+
       `;
+
     }
+
     return `
+
       Between <b>${fmt(a)}</b>
       and <b>${fmt(b)}</b>:
+
       <br><br>
-      <b>${free.join(", ")}</b>
+
+      <b>
+        ${free.join(", ")}
+      </b>
+
       <br><br>
-      These doors have no active shipment
-      overlapping that window.
+
+      These doors have no active
+      shipment overlapping that window.
+
     `;
+
   }
+
+
+  /* SHOW CONFLICTS */
+
+  if(
+    /\b(show|find|list)\b/.test(t) &&
+    /\bconflict/.test(t)
+  ){
+
+    const conflicts =
+      collectConflicts();
+
+    if(!conflicts.length){
+
+      return `
+        <span class="ok">
+          ✓ No active door conflicts detected.
+        </span>
+      `;
+
+    }
+
+    return `
+
+      <b>
+        ${conflicts.length}
+        active conflict event(s):
+      </b>
+
+      <ul>
+
+        ${conflicts.map(
+          c=>
+            `<li>
+              ${c.door}:
+              ${c.a} overlaps ${c.b}
+            </li>`
+        ).join("")}
+
+      </ul>
+
+    `;
+
+  }
+
+
   /* OPTIMIZE */
+
   if(
     /\b(optimi[sz]e|rebalance|re-?plan|fix|resolve|clear|smooth)\b/
       .test(t) &&
     !findShipment(t)
   ){
+
     const plan =
       calculateOptimization();
+
     if(!plan.actions.length){
+
       return `
-        <b>Plan analysis complete.</b>
+
+        <b>
+          Optimization analysis complete.
+        </b>
+
         <br><br>
+
         <span class="ok">
           ✓ No optimization changes are required.
         </span>
+
         <br><br>
+
         Current plan score:
         <b>${plan.score}/100</b>
+
       `;
+
     }
+
     return `
-      <b>Optimization analysis complete.</b>
+
+      <b>
+        Optimization analysis complete.
+      </b>
+
       <br>
+
       I found
       <b>${plan.actions.length}</b>
       proposed change(s).
+
       ${showPlanPreview(plan)}
+
     `;
+
   }
+
+
   /* SHIPMENT COMMAND */
+
   const ship =
     findShipment(t);
+
   const door =
     findDoor(t);
+
   const times =
     findTimes(t);
+
   const shift =
     findShift(t);
+
+
   if(
     ship &&
     (
       door ||
       times.length ||
-      shift !== null
+      shift!==null
     )
   ){
+
     const original =
       cloneState();
+
     const working =
       cloneState();
+
     const target =
       working.find(
-        s => s.id === ship.id
+        s=>s.id===ship.id
       );
+
     const fromDoor =
       target.door;
+
     const duration =
       target.end-target.start;
+
     const changes=[];
-    if(shift !== null){
+
+
+    if(shift!==null){
+
       target.start =
         Math.max(
           CONFIG.START_HR,
-          target.start + shift
+          target.start+shift
         );
+
       target.end =
-        target.start + duration;
+        target.start+duration;
+
       changes.push(
-        `Shifted ${shift > 0 ? "+" : ""}${shift}h → ${fmt(target.start)}–${fmt(target.end)}`
+        `Shifted ${shift>0?"+":""}${shift}h → ${fmt(target.start)}–${fmt(target.end)}`
       );
+
     }
-    if(times.length >= 2){
+
+
+    if(times.length>=2){
+
       target.start =
         times[0];
+
       target.end =
         times[1];
+
       changes.push(
         `Rescheduled to ${fmt(target.start)}–${fmt(target.end)}`
       );
+
     }
-    else if(times.length === 1){
+
+    else if(times.length===1){
+
       target.start =
         times[0];
+
       target.end =
         times[0]+duration;
+
       changes.push(
         `Start moved to ${fmt(target.start)}`
       );
+
     }
+
+
     if(
       door &&
-      door !== target.door
+      door!==target.door
     ){
+
       target.door =
         door;
+
       changes.push(
         `Relocated ${fromDoor} → ${door}`
       );
+
     }
-    if(target.type === "done"){
+
+
+    if(target.type==="done"){
+
       target.type =
         isRecv(target.door)
           ? "in"
           : "out";
+
     }
-    /*
-     * Temporarily calculate proposed state.
-     */
+
+
     SHIP =
       structuredClone(
         working
       );
+
     const plan =
       calculateOptimization();
-    /*
-     * Restore actual state.
-     */
+
     SHIP =
       original;
-    const directChange = {
-      id:target.id,
+
+
+    pendingPlan={
+
       before:original,
-      proposed:plan.proposed
-    };
-    pendingPlan = {
-      before:original,
+
       proposed:plan.proposed,
+
       actions:[
         {
           shipment:target.id,
-          text:changes.join(" · "),
-          reason:"Requested by operator. The planner checked the downstream schedule."
+
+          text:
+            changes.join(" · "),
+
+          reason:
+            "Requested by operator. The planner checked the downstream schedule."
         },
-        ...plan.actions
+
+        ...plan.actions.filter(
+          a =>
+            !(
+              a.shipment===target.id &&
+              a.text===changes.join(" · ")
+            )
+        )
       ],
+
       after:plan.after,
+
       score:plan.score
+
     };
+
+
     return `
-      <b>Scenario analyzed:</b>
+
+      <b>
+        Scenario analyzed:
+      </b>
+
       ${ship.code}
+
       <br><br>
-      ${changes.length
-        ? changes.join("<br>")
-        : "No direct schedule change detected."
+
+      ${
+        changes.length
+          ? changes.join("<br>")
+          : "No direct schedule change detected."
       }
-      ${showPlanPreview(pendingPlan)}
+
+      ${showPlanPreview(
+        pendingPlan
+      )}
+
     `;
+
   }
+
+
   /* SHIPMENT LOOKUP */
+
   if(
     ship &&
     !door &&
     !times.length &&
-    shift === null
+    shift===null
   ){
+
     return `
-      I found <b>${ship.code}</b>
-      on <b>${ship.door}</b>
+
+      I found
+      <b>${ship.code}</b>
+      on
+      <b>${ship.door}</b>
       (${fmt(ship.start)}–${fmt(ship.end)}).
+
       <br><br>
+
       What should I change?
+
       <br>
+
       • Door
+
       <br>
+
       • Time
+
       <br>
+
       • Delay
+
       <br>
+
       • Optimize
+
     `;
+
   }
+
+
   /* FALLBACK */
+
   return `
-    I couldn't confidently convert that request
-    into a scheduling action.
+
+    I couldn't confidently convert
+    that request into a scheduling action.
+
     <br><br>
+
     Try:
+
     <br><br>
-    <i>"Move S12 to door 10 at 2pm"</i>
+
+    <i>
+      "Move S12 to door 10 at 2pm"
+    </i>
+
     <br>
-    <i>"S8 is 2 hours late — re-plan."</i>
+
+    <i>
+      "S8 is 2 hours late — re-plan."
+    </i>
+
     <br>
-    <i>"Optimize the whole schedule."</i>
+
+    <i>
+      "Optimize the whole schedule."
+    </i>
+
     <br>
-    <i>"Which doors are free between 2pm and 4pm?"</i>
+
+    <i>
+      "Which doors are free between 2pm and 4pm?"
+    </i>
+
   `;
+
 }
+
+
 /* ============================================================
-   SEND
+   SEND AI
 ============================================================ */
+
 function send(text){
+
   text =
     (text || input.value).trim();
-  if(!text) return;
+
+  if(!text){
+    return;
+  }
+
   addUser(text);
-  input.value = "";
-  const ty =
-    typing();
-  setTimeout(() => {
-    stopTyping();
-    const html =
-      respond(text);
-    addBot(html);
-  },500 + Math.random()*500);
+
+  input.value="";
+
+  typing();
+
+  setTimeout(
+    () => {
+
+      stopTyping();
+
+      const html =
+        respond(text);
+
+      addBot(html);
+
+    },
+    500+Math.random()*500
+  );
+
 }
+
+
 $("composer").addEventListener(
   "submit",
   e => {
+
     e.preventDefault();
+
     send();
+
   }
 );
+
+
 /* ============================================================
    QUICK COMMANDS
 ============================================================ */
-const CHIPS = [
+
+const CHIPS=[
+
   "Move S12 to door 10 at 2pm",
+
   "S8 is 2 hours late — re-plan",
+
   "Optimize the whole schedule",
+
   "Which doors are free between 2pm and 4pm?",
+
   "Show conflicts",
+
   "Reset the plan"
+
 ];
+
+
 CHIPS.forEach(command => {
+
   const button =
     document.createElement("button");
-  button.className = "chip";
-  button.type = "button";
-  button.textContent = command;
+
+  button.className="chip";
+
+  button.type="button";
+
+  button.textContent=command;
+
   button.onclick =
-    () => send(command);
+    ()=>send(command);
+
   $("chips").appendChild(button);
+
 });
+
+
+/* ============================================================
+   CONFLICT COLLECTION
+============================================================ */
+
+function collectConflicts(){
+
+  const conflicts=[];
+
+  CONFIG.DOORS.forEach(door => {
+
+    const list =
+      SHIP
+        .filter(
+          s =>
+            s.door===door &&
+            s.type!=="done"
+        )
+        .sort(
+          (a,b)=>a.start-b.start
+        );
+
+    for(
+      let i=0;
+      i<list.length;
+      i++
+    ){
+
+      for(
+        let j=i+1;
+        j<list.length;
+        j++
+      ){
+
+        if(
+          list[i].start<list[j].end &&
+          list[j].start<list[i].end
+        ){
+
+          conflicts.push({
+            door,
+            a:list[i].id,
+            b:list[j].id
+          });
+
+        }
+
+      }
+
+    }
+
+  });
+
+  return conflicts;
+
+}
+
+
 /* ============================================================
    SHOW CONFLICTS
 ============================================================ */
+
 function showConflicts(){
-  const conflicts=[];
-  CONFIG.DOORS.forEach(door => {
-    const list =
-      SHIP.filter(
-        s =>
-          s.door === door &&
-          s.type !== "done"
-      );
-    const ids =
-      findRowConflicts(list);
-    if(ids.size){
-      conflicts.push(
-        `${door}: ${[...ids].join(", ")}`
-      );
-    }
-  });
+
+  const conflicts =
+    collectConflicts();
+
   if(!conflicts.length){
+
     addBot(`
+
       <span class="ok">
         ✓ No active door conflicts detected.
       </span>
+
     `);
+
     return;
+
   }
+
   addBot(`
-    <b>${conflicts.length} door(s) have conflicts:</b>
+
+    <b>
+      ${conflicts.length}
+      conflict event(s):
+    </b>
+
     <ul>
+
       ${conflicts.map(
-        x=>`<li>${x}</li>`
+        c =>
+          `<li>
+            ${c.door}:
+            ${c.a} overlaps ${c.b}
+          </li>`
       ).join("")}
+
     </ul>
+
   `);
+
 }
+
+
 /* ============================================================
    UNDO
 ============================================================ */
+
 $("undoBtn").onclick = () => {
+
   if(!historyStack.length){
+
     toast(
       "Nothing to undo",
       "warning"
     );
+
     return;
+
   }
-  const previous =
-    historyStack.pop();
+
   SHIP =
-    previous;
-  render();
+    historyStack.pop();
+
+  auditEvents.unshift({
+    time:"Just now",
+    event:"Schedule change undone",
+    object:"WMD1",
+    operator:"Demo Operator",
+    result:"Success"
+  });
+
+  renderAll();
+
   toast(
     "Previous schedule restored",
     "success"
   );
+
 };
+
+
 /* ============================================================
-   RESET
+   REFRESH
 ============================================================ */
+
 $("refreshBtn").onclick = () => {
-  render();
+
+  renderAll();
+
   toast(
-    "Schedule refreshed",
+    "Warehouse state refreshed",
     "success"
   );
+
 };
+
+
 /* ============================================================
    FILTERS
 ============================================================ */
+
 $("typeFilter").onchange =
   e => {
+
     filters.type =
       e.target.value;
+
     render();
+
   };
+
+
 $("statusFilter").onchange =
   e => {
+
     filters.status =
       e.target.value;
+
     render();
+
   };
+
+
 $("clearFilters").onclick = () => {
-  filters = {
+
+  filters={
     type:"all",
     status:"all",
     search:""
   };
+
   $("typeFilter").value="all";
+
   $("statusFilter").value="all";
+
   $("globalSearch").value="";
+
   render();
+
 };
+
+
 /* ============================================================
-   SEARCH
+   GLOBAL SEARCH
 ============================================================ */
+
 $("globalSearch").addEventListener(
   "input",
   e => {
-    filters.search =
+
+    const value =
       e.target.value.trim();
+
+    filters.search=value;
+
+    if(
+      value &&
+      currentView!=="doors" &&
+      currentView!=="shipments"
+    ){
+
+      navigate("shipments");
+
+    }
+
     render();
+
+    if(
+      currentView==="shipments"
+    ){
+
+      renderShipmentsTable();
+
+    }
+
   }
 );
+
+
 /* ============================================================
    AUDIT
 ============================================================ */
+
+function openAudit(){
+
+  navigate("history");
+
+  renderHistory();
+
+}
+
+
 $("auditBtn").onclick =
-$("auditLink").onclick = () => {
-  addBot(`
-    <b>Audit & Activity</b>
-    <br><br>
-    Demo mode is currently running
-    without a backend audit database.
-    <br><br>
-    In production, every approved schedule
-    change should record:
-    <ul>
-      <li>Operator identity</li>
-      <li>Timestamp</li>
-      <li>Original appointment</li>
-      <li>Proposed appointment</li>
-      <li>Reason</li>
-      <li>Approval decision</li>
-      <li>WMS synchronization result</li>
-    </ul>
-  `);
-};
+  openAudit;
+
+$("auditLink").onclick =
+  openAudit;
+
+
 /* ============================================================
    FULLSCREEN
 ============================================================ */
+
 $("expandBtn").onclick =
-$("expandTimeline").onclick = () => {
-  if(!document.fullscreenElement){
-    document.documentElement
-      .requestFullscreen?.();
+$("expandTimeline").onclick =
+async () => {
+
+  try{
+
+    if(!document.fullscreenElement){
+
+      await document.documentElement
+        .requestFullscreen();
+
+    }
+
+    else{
+
+      await document.exitFullscreen();
+
+    }
+
   }
-  else{
-    document.exitFullscreen?.();
+  catch(error){
+
+    toast(
+      "Fullscreen is not available",
+      "warning"
+    );
+
   }
+
 };
+
+
+/* ============================================================
+   HELP
+============================================================ */
+
+function openHelp(){
+
+  $("modalTitle").textContent =
+    "BlueYonder Warehouse Operations Demo";
+
+  $("modalBody").innerHTML = `
+
+    <p>
+      This prototype demonstrates a warehouse
+      operations control layer built around a shared
+      warehouse state.
+    </p>
+
+    <h3>
+      Navigation
+    </h3>
+
+    <p>
+      Every tab is a view inside this single
+      application. No separate HTML pages are required.
+    </p>
+
+    <h3>
+      Yard Planner AI
+    </h3>
+
+    <p>
+      The current browser implementation uses a
+      deterministic planning engine and command parser.
+      It is not connected to a live AI model or WMS.
+    </p>
+
+    <h3>
+      Production Architecture
+    </h3>
+
+    <p>
+      A production version could connect these views
+      to a backend API, WMS data, authentication,
+      audit storage and an AI planning service.
+    </p>
+
+    <h3>
+      Demo Commands
+    </h3>
+
+    <ul>
+      <li>Move S12 to door 10 at 2pm</li>
+      <li>S8 is 2 hours late — re-plan</li>
+      <li>Optimize the whole schedule</li>
+      <li>Which doors are free between 2pm and 4pm?</li>
+      <li>Show conflicts</li>
+      <li>Reset the plan</li>
+    </ul>
+
+  `;
+
+  $("modalBackdrop")
+    .classList.add("open");
+
+}
+
+
+$("helpBtn").onclick =
+  openHelp;
+
+
+$("modalClose").onclick =
+  () => {
+
+    $("modalBackdrop")
+      .classList.remove("open");
+
+  };
+
+
+$("modalBackdrop").addEventListener(
+  "click",
+  e => {
+
+    if(
+      e.target ===
+      $("modalBackdrop")
+    ){
+
+      $("modalBackdrop")
+        .classList.remove("open");
+
+    }
+
+  }
+);
+
+
 /* ============================================================
    QUICK SHIPMENT COMMAND
 ============================================================ */
+
 function quickShipmentCommand(id){
+
   closeDrawer();
+
+  navigate("doors");
+
   input.value =
     `Analyze ${id} and optimize its schedule`;
+
   input.focus();
+
 }
+
+
 /* ============================================================
-   INITIAL MESSAGE
+   DASHBOARD
 ============================================================ */
+
+function renderDashboard(){
+
+  const activeDoors =
+    CONFIG.DOORS.filter(
+      door =>
+        SHIP.some(
+          s =>
+            s.door===door &&
+            s.type!=="done"
+        )
+    ).length;
+
+  const util =
+    Math.round(
+      activeDoors /
+      CONFIG.DOORS.length *
+      100
+    );
+
+  const late =
+    SHIP.filter(
+      s =>
+        s.type!=="done" &&
+        s.tags.some(
+          t=>t.t==="Late"
+        )
+    ).length;
+
+  const conflicts =
+    totalConflicts();
+
+
+  $("dashActiveDoors").textContent =
+    activeDoors;
+
+  $("dashUtil").textContent =
+    util+"%";
+
+  $("dashLate").textContent =
+    late;
+
+  $("dashConflicts").textContent =
+    conflicts;
+
+
+  $("dashboardDoors").innerHTML =
+    CONFIG.DOORS.map(
+      door => {
+
+        const active =
+          SHIP.filter(
+            s =>
+              s.door===door &&
+              s.type!=="done"
+          ).length;
+
+        const percentage =
+          Math.min(
+            100,
+            active*48
+          );
+
+        return `
+
+          <div class="mini-row">
+
+            <div class="mini-label">
+              ${door}
+            </div>
+
+            <div class="progress ${
+              active>1
+                ? ""
+                : "green"
+            }">
+
+              <span
+                style="width:${percentage}%"
+              ></span>
+
+            </div>
+
+            <div class="mini-value">
+              ${active}
+            </div>
+
+          </div>
+
+        `;
+
+      }
+    ).join("");
+
+
+  const exceptions =
+    SHIP
+      .filter(
+        s =>
+          s.type!=="done" &&
+          (
+            s.tags.some(
+              t=>t.t==="Late"
+            ) ||
+            findRowConflicts(
+              SHIP.filter(
+                x=>x.door===s.door
+              )
+            ).has(s.id)
+          )
+      )
+      .slice(0,8);
+
+
+  $("dashboardExceptions").innerHTML =
+    exceptions.length
+      ?
+        exceptions.map(
+          s => {
+
+            const conflict =
+              findRowConflicts(
+                SHIP.filter(
+                  x=>x.door===s.door
+                )
+              ).has(s.id);
+
+            return `
+
+              <div
+                style="
+                  display:flex;
+                  align-items:center;
+                  justify-content:space-between;
+                  padding:8px 0;
+                  border-bottom:1px solid var(--grid);
+                  cursor:pointer
+                "
+                onclick="openShipment('${s.id}')"
+              >
+
+                <div>
+
+                  <b>${s.id}</b>
+
+                  <div
+                    style="
+                      color:var(--ink-soft);
+                      margin-top:2px
+                    "
+                  >
+                    ${s.door} ·
+                    ${fmt(s.start)}–${fmt(s.end)}
+                  </div>
+
+                </div>
+
+                <span class="status ${
+                  conflict
+                    ? "status-red"
+                    : "status-orange"
+                }">
+
+                  ${
+                    conflict
+                      ? "Conflict"
+                      : "Late"
+                  }
+
+                </span>
+
+              </div>
+
+            `;
+
+          }
+        ).join("")
+      :
+        `<div class="status status-green">
+          No active exceptions
+        </div>`;
+
+}
+
+
+/* ============================================================
+   SHIPMENTS TABLE
+============================================================ */
+
+function shipmentStatus(s){
+
+  const conflict =
+    findRowConflicts(
+      SHIP.filter(
+        x=>x.door===s.door
+      )
+    ).has(s.id);
+
+  if(conflict){
+    return {
+      label:"Conflict",
+      cls:"status-red"
+    };
+  }
+
+  if(s.type==="done"){
+
+    return {
+      label:"Completed",
+      cls:"status-gray"
+    };
+
+  }
+
+  if(
+    s.tags.some(
+      t=>t.t==="Late"
+    )
+  ){
+
+    return {
+      label:"Late",
+      cls:"status-orange"
+    };
+
+  }
+
+  return {
+    label:"Active",
+    cls:"status-blue"
+  };
+
+}
+
+
+function renderShipmentsTable(){
+
+  const typeFilter =
+    $("shipmentTypeFilter")
+      ?.value || "all";
+
+  const statusFilter =
+    $("shipmentStatusFilter")
+      ?.value || "all";
+
+
+  let data =
+    [...SHIP];
+
+
+  if(filters.search){
+
+    const q =
+      filters.search.toLowerCase();
+
+    data =
+      data.filter(
+        s =>
+          s.id.toLowerCase().includes(q) ||
+          s.code.toLowerCase().includes(q) ||
+          s.door.toLowerCase().includes(q)
+      );
+
+  }
+
+
+  if(typeFilter!=="all"){
+
+    data =
+      data.filter(
+        s =>
+          typeFilter==="receiving"
+            ? isRecv(s.door)
+            : !isRecv(s.door)
+      );
+
+  }
+
+
+  if(statusFilter!=="all"){
+
+    data =
+      data.filter(
+        s => {
+
+          const status =
+            shipmentStatus(s).label.toLowerCase();
+
+          return (
+            status ===
+            statusFilter
+          );
+
+        }
+      );
+
+  }
+
+
+  $("shipmentCount").textContent =
+    data.length;
+
+
+  $("shipmentsTable").innerHTML =
+    data.map(
+      s => {
+
+        const status =
+          shipmentStatus(s);
+
+        const workflow =
+          isRecv(s.door)
+            ? "Receiving"
+            : "Shipping";
+
+        return `
+
+          <tr
+            style="cursor:pointer"
+            onclick="openShipment('${s.id}')"
+          >
+
+            <td>
+              <b>${s.id}</b>
+            </td>
+
+            <td>
+              ${s.door}
+            </td>
+
+            <td>
+              ${workflow}
+            </td>
+
+            <td>
+              ${fmt(s.start)}
+              –
+              ${fmt(s.end)}
+            </td>
+
+            <td>
+
+              <span
+                class="status ${status.cls}"
+              >
+                ${status.label}
+              </span>
+
+            </td>
+
+            <td>
+              ${
+                s.tags.length
+                  ? s.tags.map(
+                      t=>t.t
+                    ).join(", ")
+                  : "None"
+              }
+            </td>
+
+          </tr>
+
+        `;
+
+      }
+    ).join("");
+
+}
+
+
+$("shipmentTypeFilter").onchange =
+  renderShipmentsTable;
+
+$("shipmentStatusFilter").onchange =
+  renderShipmentsTable;
+
+
+/* ============================================================
+   WORK QUEUE
+============================================================ */
+
+function renderWorkQueue(){
+
+  const queue=[];
+
+  SHIP.forEach(s => {
+
+    const conflict =
+      findRowConflicts(
+        SHIP.filter(
+          x=>x.door===s.door
+        )
+      ).has(s.id);
+
+    if(conflict){
+
+      queue.push({
+        priority:"Critical",
+        cls:"status-red",
+        issue:"Door appointment conflict",
+        shipment:s.id,
+        door:s.door,
+        action:"Re-plan"
+      });
+
+    }
+
+    if(
+      s.type!=="done" &&
+      s.tags.some(
+        t=>t.t==="Late"
+      )
+    ){
+
+      queue.push({
+        priority:"High",
+        cls:"status-orange",
+        issue:"Late appointment",
+        shipment:s.id,
+        door:s.door,
+        action:"Review"
+      });
+
+    }
+
+  });
+
+
+  $("queueOpen").textContent =
+    queue.length;
+
+  $("queueCritical").textContent =
+    queue.filter(
+      x=>x.priority==="Critical"
+    ).length;
+
+  $("queueLate").textContent =
+    SHIP.filter(
+      s =>
+        s.type!=="done" &&
+        s.tags.some(
+          t=>t.t==="Late"
+        )
+    ).length;
+
+  $("queueConflict").textContent =
+    totalConflicts();
+
+
+  $("workflowExceptions").innerHTML =
+    queue
+      .slice(0,6)
+      .map(
+        q => `
+
+          <div
+            style="
+              padding:8px 0;
+              border-bottom:1px solid var(--grid)
+            "
+          >
+
+            <span class="status ${q.cls}">
+              ${q.priority}
+            </span>
+
+            <div
+              style="
+                margin-top:5px;
+                font-weight:600
+              "
+            >
+              ${q.issue}
+            </div>
+
+            <div
+              style="
+                color:var(--ink-soft);
+                margin-top:2px
+              "
+            >
+              ${q.shipment} · ${q.door}
+            </div>
+
+          </div>
+
+        `
+      )
+      .join("");
+
+
+  $("queueTable").innerHTML =
+    queue.length
+      ?
+        queue.map(
+          q => `
+
+            <tr>
+
+              <td>
+                <span
+                  class="status ${q.cls}"
+                >
+                  ${q.priority}
+                </span>
+              </td>
+
+              <td>
+                ${q.issue}
+              </td>
+
+              <td>
+                <b>${q.shipment}</b>
+              </td>
+
+              <td>
+                ${q.door}
+              </td>
+
+              <td>
+                <button
+                  class="btn btn-primary"
+                  onclick="quickShipmentCommand('${q.shipment}')"
+                >
+                  ${q.action}
+                </button>
+              </td>
+
+            </tr>
+
+          `
+        ).join("")
+      :
+        `
+          <tr>
+            <td colspan="5">
+              <span class="status status-green">
+                No open exceptions
+              </span>
+            </td>
+          </tr>
+        `;
+
+}
+
+
+/* ============================================================
+   APPOINTMENTS
+============================================================ */
+
+function renderAppointments(){
+
+  $("appointmentsTable").innerHTML =
+    [...SHIP]
+      .sort(
+        (a,b)=>a.start-b.start
+      )
+      .map(
+        s => {
+
+          const status =
+            shipmentStatus(s);
+
+          return `
+
+            <tr
+              style="cursor:pointer"
+              onclick="openShipment('${s.id}')"
+            >
+
+              <td>
+                <b>${s.id}</b>
+              </td>
+
+              <td>
+                ${s.door}
+              </td>
+
+              <td>
+                ${fmt(s.start)}
+                –
+                ${fmt(s.end)}
+              </td>
+
+              <td>
+                ${
+                  isRecv(s.door)
+                    ? "Receiving"
+                    : "Shipping"
+                }
+              </td>
+
+              <td>
+                <span
+                  class="status ${status.cls}"
+                >
+                  ${status.label}
+                </span>
+              </td>
+
+              <td>
+                ${
+                  s.tags.length
+                    ? s.tags.map(
+                        t=>t.t
+                      ).join(", ")
+                    : "None"
+                }
+              </td>
+
+            </tr>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+
+/* ============================================================
+   HISTORY
+============================================================ */
+
+function renderHistory(){
+
+  $("historyTable").innerHTML =
+    auditEvents
+      .map(
+        event => `
+
+          <tr>
+
+            <td>
+              ${event.time}
+            </td>
+
+            <td>
+              <b>${event.event}</b>
+            </td>
+
+            <td>
+              ${event.object}
+            </td>
+
+            <td>
+              ${event.operator}
+            </td>
+
+            <td>
+              <span class="status status-green">
+                ${event.result}
+              </span>
+            </td>
+
+          </tr>
+
+        `
+      )
+      .join("");
+
+}
+
+
+/* ============================================================
+   CHECK IN
+============================================================ */
+
+$("checkinBtn").onclick = () => {
+
+  const carrier =
+    $("checkinCarrier").value.trim();
+
+  const trailer =
+    $("checkinTrailer").value.trim();
+
+  const shipment =
+    $("checkinShipment").value.trim();
+
+  const door =
+    $("checkinDoor").value;
+
+
+  if(!carrier || !trailer || !shipment){
+
+    toast(
+      "Enter carrier, trailer and shipment",
+      "warning"
+    );
+
+    return;
+
+  }
+
+
+  auditEvents.unshift({
+    time:"Just now",
+    event:"Carrier checked in",
+    object:`${shipment} · ${door}`,
+    operator:"Demo Operator",
+    result:"Success"
+  });
+
+
+  toast(
+    `${carrier} checked in at ${door}`,
+    "success"
+  );
+
+
+  $("checkinCarrier").value="";
+  $("checkinTrailer").value="";
+  $("checkinShipment").value="";
+
+};
+
+
+/* ============================================================
+   INITIAL CHAT
+============================================================ */
+
 function initChat(){
+
   addBot(`
+
     👋 Hi Brandon Bright.
-    I'm the <b>Yard Planner AI</b> embedded directly
-    inside Door Activity.
+
+    I'm the
+    <b>Yard Planner AI</b>
+    embedded directly inside Door Activity.
+
     <br><br>
-    I can analyze the dock schedule, model
-    what-if scenarios, identify conflicts and
-    generate a proposed plan.
+
+    I can analyze the dock schedule,
+    model what-if scenarios, identify
+    conflicts and generate a proposed plan.
+
     <br><br>
-    <b>Important:</b> schedule changes are now
-    shown as a <b>proposal first</b>.
-    An operator must approve the plan before
-    the schedule changes.
+
+    <b>Important:</b>
+    schedule changes are shown as a
+    <b>proposal first</b>.
+
+    An operator must approve the plan
+    before the schedule changes.
+
     <br><br>
+
     Try:
+
     <br>
-    <i>"S8 is 2 hours late — re-plan."</i>
+
+    <i>
+      "S8 is 2 hours late — re-plan."
+    </i>
+
   `);
+
 }
+
+
 /* ============================================================
-   INIT
+   KEYBOARD SHORTCUTS
 ============================================================ */
+
+document.addEventListener(
+  "keydown",
+  e => {
+
+    if(
+      e.key==="Escape" &&
+      drawer.classList.contains("open")
+    ){
+
+      closeDrawer();
+
+    }
+
+    if(
+      e.key==="Escape" &&
+      $("modalBackdrop")
+        .classList.contains("open")
+    ){
+
+      $("modalBackdrop")
+        .classList.remove("open");
+
+    }
+
+  }
+);
+
+
+/* ============================================================
+   INITIALIZATION
+============================================================ */
+
 buildHeader();
-render();
+
+renderAll();
+
 initChat();
+
+initializeNavigation();
+
 </script>
+
 </body>
 </html>
